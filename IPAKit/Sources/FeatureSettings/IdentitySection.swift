@@ -38,7 +38,7 @@ private struct IdentityHero: View {
             Chip(store.identityChip, color: appTint, shape: .capsule)
             Text(verbatim: store.identityText)
                 .font(.amountTitle)
-                .monospaced()
+                .monospacedDigit()
                 .foregroundStyle(Color.primary)
                 .amountLine()
             Text("What Apple sees as this device").font(.subheadline).foregroundStyle(.secondary)

@@ -49,7 +49,7 @@ private struct AppChips: View {
 
     var body: some View {
         LazyVGrid(
-            columns: [GridItem(.adaptive(minimum: 96, spacing: .spaceXS))], spacing: .spaceXS
+            columns: [GridItem(.adaptive(minimum: 96))], spacing: .spaceXS
         ) {
             chips
         }

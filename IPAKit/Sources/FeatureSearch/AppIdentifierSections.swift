@@ -39,7 +39,7 @@ private struct IdentifierRow: View {
                         .font(.footnote)
                         .foregroundStyle(.secondary)
                     Text(verbatim: identifier.value)
-                        .font(.body.monospaced())
+                        .font(.system(.body, design: .monospaced))
                         .lineLimit(1)
                         .truncationMode(.middle)
                 }
