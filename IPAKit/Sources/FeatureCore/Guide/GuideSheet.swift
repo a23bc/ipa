@@ -43,7 +43,6 @@ public struct GuideSheet<Page: View>: View {
         .change(of: index, initial: true) { shownIndex = index }
         .fixedSize(horizontal: false, vertical: true)
         .onSizeChange { height = $0.height }
-        .presentationDragIndicator(.hidden)
         .interactiveDismissDisabled(isWorking)
     }
 }

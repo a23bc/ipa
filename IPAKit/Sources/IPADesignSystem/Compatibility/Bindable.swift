@@ -8,7 +8,7 @@ import SwiftUI
 public struct Bind<Object: ObservableObject> {
     private let object: Object
 
-    public init(_ object: Object) {
+    public init(wrappedValue object: Object) {
         self.object = object
     }
 
