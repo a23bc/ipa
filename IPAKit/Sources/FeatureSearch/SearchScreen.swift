@@ -4,8 +4,8 @@ import IPADomain
 import SwiftUI
 
 public struct SearchScreen: View {
-    @Environment(SearchModel.self) private var search
-    @Environment(IPANavigation.self) private var navigation
+    @EnvironmentObject private var search: SearchModel
+    @EnvironmentObject private var navigation: IPANavigation
 
     public init() {}
 
@@ -15,13 +15,12 @@ public struct SearchScreen: View {
             SearchResultsSection()
         }
         .overlay { SearchStateView() }
-        .fontDesign(.rounded)
         .toolbar { ToolbarItem(placement: .leading) { AccountMenu() } }
         .toolbar { ToolbarItem(placement: .primaryAction) { StorefrontButton() } }
         .searchable(text: $search.text, prompt: Text("Name, bundle ID, link or app ID"))
         .autocorrectionDisabled()
         .task(id: search.key) { await search.search() }
-        .onChange(of: navigation.pendingSearch, initial: true) { _, pending in
+        .change(of: navigation.pendingSearch, initial: true) { _, pending in
             guard let pending else { return }
             navigation.pendingSearch = nil
             search.receive(pending)
@@ -31,7 +30,7 @@ public struct SearchScreen: View {
 }
 
 private struct StorefrontButton: View {
-    @Environment(SearchModel.self) private var search
+    @EnvironmentObject private var search: SearchModel
     @Environment(\.open) private var open
     @Environment(\.navigationSection) private var section
 
@@ -41,14 +40,14 @@ private struct StorefrontButton: View {
         } label: {
             Text(verbatim: search.storefrontTitle).lineLimit(1)
         }
-        .tint(Color.primary)
+        .accentColor(Color.primary)
         .accessibilityLabel("Store")
         .accessibilityValue(Text(verbatim: search.storefrontName))
     }
 }
 
 private struct SearchResultsSection: View {
-    @Environment(SearchModel.self) private var search
+    @EnvironmentObject private var search: SearchModel
     @Environment(\.open) private var open
     @Environment(\.navigationSection) private var section
 
@@ -61,7 +60,7 @@ private struct SearchResultsSection: View {
                     } label: {
                         SearchResultRow(app: app)
                     }
-                    .tint(Color.primary)
+                    .accentColor(Color.primary)
                 }
             } footer: {
                 if !search.isShowingPlaceholders { Text(verbatim: search.footer) }
@@ -98,7 +97,7 @@ private struct SearchResultRow: View {
 }
 
 private struct SearchStateView: View {
-    @Environment(SearchModel.self) private var search
+    @EnvironmentObject private var search: SearchModel
     @Environment(\.open) private var open
     @Environment(\.navigationSection) private var section
 
@@ -117,7 +116,7 @@ private struct SearchStateView: View {
                 }
             }
         } else if search.isShowingNoResults {
-            ContentUnavailableView {
+            UnavailableState {
                 Label("No Results", systemImage: "magnifyingglass")
             } description: {
                 Text(verbatim: search.noResultsMessage)
@@ -127,7 +126,7 @@ private struct SearchStateView: View {
                     .buttonStyle(.borderless)
             }
         } else if search.failure != nil {
-            ContentUnavailableView {
+            UnavailableState {
                 Label("Couldn't Search", systemImage: "wifi.exclamationmark")
             } description: {
                 Text(verbatim: search.failureMessage)

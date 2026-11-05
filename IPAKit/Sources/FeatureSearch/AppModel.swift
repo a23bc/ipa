@@ -1,10 +1,10 @@
+import Combine
 import FeatureCore
 import Foundation
 import IPADomain
-import Observation
 
-@MainActor @Observable
-public final class AppModel {
+@MainActor
+public final class AppModel: ObservableObject {
     public enum VersionsStatus: Hashable, Sendable {
         case idle, loading, loaded
         case failed(IPAError)
@@ -16,28 +16,28 @@ public final class AppModel {
     }
 
     public let id: Int64
-    public private(set) var app: StoreApp?
-    public private(set) var isLoading = false
-    public private(set) var loadFailure: IPAError?
-    public var error: IPAError?
-    public private(set) var versionIDs: [String] = []
-    public internal(set) var versions: [String: AppVersion] = [:]
-    public internal(set) var versionsStatus: VersionsStatus = .idle
-    public var confirmation: VersionChoice?
-    public var versionIDText = ""
-    public private(set) var copyCount = 0
-    public private(set) var startCount = 0
-    @ObservationIgnored let session: SessionModel
-    @ObservationIgnored let accounts: AccountsModel
-    @ObservationIgnored let batchSize: Int
-    @ObservationIgnored var versionsRequest = 0
-    @ObservationIgnored var requestedMetadata: Set<String> = []
-    @ObservationIgnored var pendingMetadata: [String] = []
-    @ObservationIgnored var metadataTask: Task<Void, Never>?
-    @ObservationIgnored private let preferences: StorePreferences
-    @ObservationIgnored private let downloads: DownloadCenter
-    @ObservationIgnored private let copy: @MainActor (String) -> Void
-    @ObservationIgnored private var request = 0
+    @Published public private(set) var app: StoreApp?
+    @Published public private(set) var isLoading = false
+    @Published public private(set) var loadFailure: IPAError?
+    @Published public var error: IPAError?
+    @Published public private(set) var versionIDs: [String] = []
+    @Published public internal(set) var versions: [String: AppVersion] = [:]
+    @Published public internal(set) var versionsStatus: VersionsStatus = .idle
+    @Published public var confirmation: VersionChoice?
+    @Published public var versionIDText = ""
+    @Published public private(set) var copyCount = 0
+    @Published public private(set) var startCount = 0
+    let session: SessionModel
+    let accounts: AccountsModel
+    let batchSize: Int
+    var versionsRequest = 0
+    var requestedMetadata: Set<String> = []
+    var pendingMetadata: [String] = []
+    var metadataTask: Task<Void, Never>?
+    private let preferences: StorePreferences
+    private let downloads: DownloadCenter
+    private let copy: @MainActor (String) -> Void
+    private var request = 0
 
     public init(
         id: Int64, session: SessionModel, preferences: StorePreferences, accounts: AccountsModel,

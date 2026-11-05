@@ -1,15 +1,15 @@
+import Combine
 import Foundation
 import IPAData
 import IPADomain
 import IPAMock
-import Observation
 
-@MainActor @Observable
-public final class IPAServices {
+@MainActor
+public final class IPAServices: ObservableObject {
     public static let shared = IPAServices()
-    public var pendingURL: URL?
+    @Published public var pendingURL: URL?
     public let store: StoreServices
-    @ObservationIgnored private var opening: Task<IPADatabase, any Error>?
+    private var opening: Task<IPADatabase, any Error>?
 
     private init() {
         let vault = KeychainAccountVault()

@@ -6,6 +6,13 @@ extension View {
     }
 }
 
+private struct IsLoadingKey: EnvironmentKey {
+    static var defaultValue: Bool { false }
+}
+
 extension EnvironmentValues {
-    @Entry public var isLoading: Bool = false
+    public var isLoading: Bool {
+        get { self[IsLoadingKey.self] }
+        set { self[IsLoadingKey.self] = newValue }
+    }
 }

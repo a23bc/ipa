@@ -4,8 +4,8 @@ import IPADomain
 import SwiftUI
 
 public struct AccountsScreen: View {
-    @Environment(AccountsModel.self) private var accounts
-    @Environment(SessionModel.self) private var session
+    @EnvironmentObject private var accounts: AccountsModel
+    @EnvironmentObject private var session: SessionModel
     @Environment(\.open) private var open
     @Environment(\.navigationSection) private var section
 
@@ -20,13 +20,12 @@ public struct AccountsScreen: View {
             RemoveAccountSection()
         }
         .accountsEmptyState(when: accounts.isEmpty)
-        .fontDesign(.rounded)
         .toolbar {
             ToolbarItem(placement: .primaryAction) {
                 Button("Add Account", systemImage: "person.badge.plus") {
                     open(.signIn, in: section)
                 }
-                .tint(Color.primary)
+                .accentColor(Color.primary)
             }
         }
         .confirmationDialog(
@@ -50,7 +49,7 @@ public struct AccountsScreen: View {
 }
 
 private struct ActiveAccountSection: View {
-    @Environment(AccountsModel.self) private var accounts
+    @EnvironmentObject private var accounts: AccountsModel
     @Environment(\.appTint) private var appTint
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
 
@@ -72,7 +71,7 @@ private struct ActiveAccountSection: View {
                         .foregroundStyle(.secondary)
                         .lineLimit(1)
                         .minimumScaleFactor(0.8)
-                    Chip(active.storefront.title, color: appTint, shape: .capsule)
+                    Chip(active.storefront.title, color: appTint, shape: Capsule())
                 }
                 .id(active.email)
                 .transition(.opacity)
@@ -81,14 +80,14 @@ private struct ActiveAccountSection: View {
                 .frame(maxWidth: .infinity)
                 .padding(.vertical, .spaceL)
                 .accessibilityElement(children: .combine)
-                .animation(reduceMotion ? nil : .smooth, value: active.email)
+                .animation(reduceMotion ? nil : .smoothSpring, value: active.email)
             }
         }
     }
 }
 
 private struct OtherAccountsSection: View {
-    @Environment(AccountsModel.self) private var accounts
+    @EnvironmentObject private var accounts: AccountsModel
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
 
     var body: some View {
@@ -96,11 +95,11 @@ private struct OtherAccountsSection: View {
             Section {
                 ForEach(accounts.others) { account in
                     Button {
-                        withAnimation(reduceMotion ? nil : .smooth) { accounts.select(account) }
+                        withAnimation(reduceMotion ? nil : .smoothSpring) { accounts.select(account) }
                     } label: {
                         AccountRow(account: account)
                     }
-                    .tint(Color.primary)
+                    .accentColor(Color.primary)
                     .swipeActions {
                         Button("Remove", systemImage: "trash", role: .destructive) {
                             accounts.removal = account
@@ -121,7 +120,6 @@ private struct OtherAccountsSection: View {
             } footer: {
                 Text(verbatim: accounts.othersFooter)
             }
-            .sensoryFeedback(.selection, trigger: accounts.activeEmail)
         }
     }
 }
@@ -149,7 +147,7 @@ private struct AccountRow: View {
 }
 
 private struct EngineSection: View {
-    @Environment(SessionModel.self) private var session
+    @EnvironmentObject private var session: SessionModel
 
     var body: some View {
         Section {
@@ -163,7 +161,7 @@ private struct EngineSection: View {
 }
 
 private struct RemoveAccountSection: View {
-    @Environment(AccountsModel.self) private var accounts
+    @EnvironmentObject private var accounts: AccountsModel
 
     var body: some View {
         if let active = accounts.active {
@@ -182,7 +180,7 @@ private struct RemoveAccountSection: View {
 }
 
 private struct AccountsEmptyState: View {
-    @Environment(AccountsModel.self) private var accounts
+    @EnvironmentObject private var accounts: AccountsModel
     @Environment(\.open) private var open
     @Environment(\.navigationSection) private var section
 

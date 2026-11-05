@@ -37,10 +37,10 @@ public struct Chip: View {
             .foregroundStyle(color)
             .lineLimit(1)
             .padding(.horizontal, .spaceM)
-            .padding(.vertical, shape == .capsule ? .spaceS : .space2XS)
+            .padding(.vertical, shape == Capsule() ? .spaceS : .space2XS)
         switch shape {
-        case .capsule: label.background(color.opacity(.opacityTint), in: .capsule)
-        case .tag: label.background(color.opacity(.opacityTint), in: .rect(cornerRadius: .radiusS))
+        case Capsule(): label.background(color.opacity(.opacityTint), in: Capsule())
+        case .tag: label.background(color.opacity(.opacityTint), in: RoundedRectangle(cornerRadius: .radiusS))
         }
     }
 }

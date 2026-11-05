@@ -29,7 +29,7 @@ extension SettingsScreen where Extra == EmptyView {
 }
 
 private struct SettingsSections<Extra: View>: View {
-    @Environment(SettingsModel.self) private var settings
+    @EnvironmentObject private var settings: SettingsModel
     @Environment(\.showGuide) private var showGuide
     @Environment(\.featureFlags) private var flags
     let extra: Extra

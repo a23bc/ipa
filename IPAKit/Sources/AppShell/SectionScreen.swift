@@ -6,10 +6,10 @@ import FeatureSettings
 import SwiftUI
 
 struct SectionScreen: View {
-    @Environment(SessionModel.self) private var session
-    @Environment(StorePreferences.self) private var preferences
-    @Environment(AccountsModel.self) private var accounts
-    @Environment(DownloadCenter.self) private var downloads
+    @EnvironmentObject private var session: SessionModel
+    @EnvironmentObject private var preferences: StorePreferences
+    @EnvironmentObject private var accounts: AccountsModel
+    @EnvironmentObject private var downloads: DownloadCenter
     let section: AppSection
 
     @ViewBuilder var body: some View {

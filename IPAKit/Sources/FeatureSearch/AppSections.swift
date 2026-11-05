@@ -4,7 +4,7 @@ import IPADomain
 import SwiftUI
 
 struct AppHeroSection: View {
-    @Environment(AppModel.self) private var model
+    @EnvironmentObject private var model: AppModel
 
     var body: some View {
         Section {
@@ -22,7 +22,7 @@ struct AppHeroSection: View {
 }
 
 private struct AppHero: View {
-    @Environment(AppModel.self) private var model
+    @EnvironmentObject private var model: AppModel
 
     var body: some View {
         let app = model.shownApp
@@ -44,7 +44,7 @@ private struct AppHero: View {
 }
 
 private struct AppChips: View {
-    @Environment(AppModel.self) private var model
+    @EnvironmentObject private var model: AppModel
     @Environment(\.appTint) private var appTint
 
     var body: some View {
@@ -57,13 +57,13 @@ private struct AppChips: View {
 
     private var chips: some View {
         ForEach(model.chips) {
-            Chip($0.text, color: $0.color(tint: appTint), shape: .capsule).fixedSize()
+            Chip($0.text, color: $0.color(tint: appTint), shape: Capsule()).fixedSize()
         }
     }
 }
 
 private struct AppPrimaryRow: View {
-    @Environment(AppModel.self) private var model
+    @EnvironmentObject private var model: AppModel
     @Environment(\.open) private var open
     @Environment(\.showGuide) private var showGuide
     @Environment(\.navigationSection) private var section
@@ -90,7 +90,7 @@ private struct AppPrimaryRow: View {
 }
 
 private struct AppProgressRow: View {
-    @Environment(AppModel.self) private var model
+    @EnvironmentObject private var model: AppModel
     @Environment(\.appTint) private var appTint
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
 
@@ -109,8 +109,8 @@ private struct AppProgressRow: View {
             }
             .lineLimit(1)
             ProgressView(value: model.progressFraction)
-                .tint(appTint)
-                .animation(reduceMotion ? nil : .smooth, value: model.progressFraction)
+                .accentColor(appTint)
+                .animation(reduceMotion ? nil : .smoothSpring, value: model.progressFraction)
         }
         .padding(.vertical, .space2XS)
         .accessibilityElement(children: .combine)
@@ -118,7 +118,7 @@ private struct AppProgressRow: View {
 }
 
 struct AppVersionsSection: View {
-    @Environment(AppModel.self) private var model
+    @EnvironmentObject private var model: AppModel
 
     var body: some View {
         if model.isShowingVersions {
@@ -146,7 +146,7 @@ struct AppVersionsSection: View {
 }
 
 private struct VersionRow: View {
-    @Environment(AppModel.self) private var model
+    @EnvironmentObject private var model: AppModel
     let externalID: String
 
     var body: some View {
@@ -165,7 +165,7 @@ private struct VersionRow: View {
             .frame(maxWidth: .infinity, alignment: .leading)
             .contentShape(.rect)
         }
-        .tint(Color.primary)
+        .accentColor(Color.primary)
         .disabled(!model.canDownload)
         .onAppear { model.requestMetadata(for: externalID) }
         .accessibilityElement(children: .ignore)
@@ -175,7 +175,7 @@ private struct VersionRow: View {
 }
 
 private struct VersionsFailureRow: View {
-    @Environment(AppModel.self) private var model
+    @EnvironmentObject private var model: AppModel
     let message: String
 
     var body: some View {

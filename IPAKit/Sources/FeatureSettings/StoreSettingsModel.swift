@@ -1,25 +1,25 @@
+import Combine
 import FeatureCore
 import Foundation
 import IPADomain
-import Observation
 
-@MainActor @Observable
-public final class StoreSettingsModel {
+@MainActor
+public final class StoreSettingsModel: ObservableObject {
     public enum EraseStep: Int, CaseIterable, Sendable {
         case confirm, done
     }
 
-    public private(set) var identity: DeviceIdentity?
-    public private(set) var isWorking = false
-    public var isConfirmingIdentity = false
-    public var isErasing = false
-    public var eraseStep = EraseStep.confirm
-    public var error: IPAError?
-    @ObservationIgnored let settings: SettingsModel
-    @ObservationIgnored let session: SessionModel
-    @ObservationIgnored let preferences: StorePreferences
-    @ObservationIgnored let accounts: AccountsModel
-    @ObservationIgnored let downloads: DownloadCenter
+    @Published public private(set) var identity: DeviceIdentity?
+    @Published public private(set) var isWorking = false
+    @Published public var isConfirmingIdentity = false
+    @Published public var isErasing = false
+    @Published public var eraseStep = EraseStep.confirm
+    @Published public var error: IPAError?
+    let settings: SettingsModel
+    let session: SessionModel
+    let preferences: StorePreferences
+    let accounts: AccountsModel
+    let downloads: DownloadCenter
 
     public init(
         settings: SettingsModel, session: SessionModel, preferences: StorePreferences,

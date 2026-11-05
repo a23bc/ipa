@@ -13,7 +13,7 @@ public struct GuideExample<Content: View>: View {
         VStack(alignment: .leading, spacing: .spaceM) { content }
             .padding(.spaceL)
             .frame(maxWidth: 420)
-            .background(background, in: .rect(cornerRadius: .radiusL))
+            .background(background, in: RoundedRectangle(cornerRadius: .radiusL))
             .allowsHitTesting(false)
     }
 }
@@ -85,7 +85,7 @@ public struct ExampleBar: View {
                 .foregroundStyle(color)
             }
             .lineLimit(1)
-            ProgressView(value: min(ratio, 1)).tint(color)
+            ProgressView(value: min(ratio, 1)).accentColor(color)
         }
     }
 }

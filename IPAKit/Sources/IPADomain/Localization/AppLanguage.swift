@@ -43,9 +43,11 @@ public enum AppLanguage: String, CaseIterable, Identifiable, Sendable {
     }
 
     public var locale: Locale {
-        var components = Locale.Components(identifier: code)
-        if components.region == nil { components.region = Locale.current.region }
-        return Locale(components: components)
+        var identifier = code.replacingOccurrences(of: "-", with: "_")
+        if !identifier.contains("_"), let region = Locale.current.regionCode {
+            identifier += "_" + region
+        }
+        return Locale(identifier: identifier)
     }
 
     public var bundle: Bundle {

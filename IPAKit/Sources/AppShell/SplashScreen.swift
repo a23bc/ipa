@@ -1,11 +1,11 @@
+import Combine
 import FeatureCore
 import FeatureSettings
 import IPADesignSystem
-import Observation
 import SwiftUI
 
-@MainActor @Observable
-public final class LaunchProgress {
+@MainActor
+public final class LaunchProgress: ObservableObject {
     public enum Step: CaseIterable, Sendable {
         case database, content
 
@@ -17,8 +17,8 @@ public final class LaunchProgress {
         }
     }
 
-    public private(set) var finished: Set<Step> = []
-    public private(set) var isDismissed = false
+    @Published public private(set) var finished: Set<Step> = []
+    @Published public private(set) var isDismissed = false
 
     public init() {}
 
@@ -38,7 +38,7 @@ public final class LaunchProgress {
 }
 
 public struct SplashScreen<Footer: View>: View {
-    @Environment(SettingsModel.self) private var settings: SettingsModel?
+    @EnvironmentObject private var settings: SettingsModel
     @Environment(\.appTint) private var appTint
     private let progress: Double?
     private let status: LocalizedStringKey?
@@ -55,15 +55,14 @@ public struct SplashScreen<Footer: View>: View {
 
     public var body: some View {
         VStack(spacing: .spaceL) {
-            AppIconImage(icon: settings?.appIcon ?? .standard, size: .badgeXL * 2)
+            AppIconImage(icon: settings.appIcon, size: .badgeXL * 2)
                 .shadow(color: .black.opacity(.opacityFill), radius: .spaceM, y: .spaceS)
             Text(verbatim: "IPA")
                 .font(.titleLarge)
-                .fontDesign(.rounded)
             VStack(spacing: .spaceS) {
                 if let progress {
                     ProgressView(value: progress)
-                        .tint(appTint)
+                        .accentColor(appTint)
                         .frame(maxWidth: .ring * 2)
                 }
                 if let status {
@@ -76,7 +75,6 @@ public struct SplashScreen<Footer: View>: View {
             .animation(.easeOut(duration: 0.25), value: progress)
             footer
         }
-        .fontDesign(.rounded)
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .background(.groupedBackground)
         .accessibilityElement(children: .combine)

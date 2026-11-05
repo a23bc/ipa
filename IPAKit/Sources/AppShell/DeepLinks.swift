@@ -2,13 +2,13 @@ import FeatureCore
 import SwiftUI
 
 struct DeepLinks: ViewModifier {
-    @Environment(IPANavigation.self) private var navigation
+    @EnvironmentObject private var navigation: IPANavigation
     @Environment(\.horizontalSizeClass) private var horizontalSizeClass
 
     func body(content: Content) -> some View {
         content
             .onOpenURL(perform: handle)
-            .onChange(of: IPAServices.shared.pendingURL, initial: true) { _, url in
+            .change(of: IPAServices.shared.pendingURL, initial: true) { _, url in
                 guard let url else { return }
                 IPAServices.shared.pendingURL = nil
                 handle(url)

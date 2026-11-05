@@ -5,9 +5,9 @@ import IPADomain
 import SwiftUI
 
 public struct MainScreen: View {
-    @Environment(SessionModel.self) private var session
-    @Environment(IPANavigation.self) private var navigation
-    @Environment(LaunchProgress.self) private var launch
+    @EnvironmentObject private var session: SessionModel
+    @EnvironmentObject private var navigation: IPANavigation
+    @EnvironmentObject private var launch: LaunchProgress
     @Environment(\.featureFlags) private var flags
     @Environment(\.horizontalSizeClass) private var horizontalSizeClass
     @Environment(\.locale) private var locale
@@ -48,12 +48,12 @@ public struct MainScreen: View {
                 navigation.open(route, in: section, beside: horizontalSizeClass == .regular)
             }
         )
-        .onChange(of: session.generation, initial: true) { launch.finish(.content) }
+        .change(of: session.generation, initial: true) { launch.finish(.content) }
         .task(id: launch.isComplete) {
             try? await Task.sleep(for: launch.isComplete ? .milliseconds(600) : .seconds(8))
             launch.dismiss()
         }
-        .onChange(of: navigation.selectedSection) { navigation.closeInspectorOutsideSelection() }
+        .change(of: navigation.selectedSection) { navigation.closeInspectorOutsideSelection() }
         .modifier(DeepLinks())
     }
 }

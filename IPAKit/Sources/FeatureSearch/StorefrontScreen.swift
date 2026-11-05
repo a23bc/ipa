@@ -4,8 +4,8 @@ import IPADomain
 import SwiftUI
 
 public struct StorefrontScreen: View {
-    @Environment(StorePreferences.self) private var preferences
-    @Environment(AccountsModel.self) private var accounts
+    @EnvironmentObject private var preferences: StorePreferences
+    @EnvironmentObject private var accounts: AccountsModel
 
     public init() {}
 
@@ -17,7 +17,7 @@ public struct StorefrontScreen: View {
 }
 
 private struct StorefrontList: View {
-    @Environment(StorefrontModel.self) private var model
+    @EnvironmentObject private var model: StorefrontModel
 
     var body: some View {
         @Bindable var model = model
@@ -26,19 +26,17 @@ private struct StorefrontList: View {
             StorefrontsSection()
         }
         .overlay {
-            if model.isShowingNoResults { ContentUnavailableView.search(text: model.query) }
+            if model.isShowingNoResults { UnavailableState.search(text: model.query) }
         }
-        .fontDesign(.rounded)
         .readableWidth()
         .searchable(text: $model.text, prompt: Text("Country or region"))
         .autocorrectionDisabled()
-        .sensoryFeedback(.selection, trigger: model.selection)
         .navigationTitle("Storefront")
     }
 }
 
 private struct AccountStoreSection: View {
-    @Environment(StorefrontModel.self) private var model
+    @EnvironmentObject private var model: StorefrontModel
     @Environment(\.close) private var close
 
     var body: some View {
@@ -60,7 +58,7 @@ private struct AccountStoreSection: View {
                     }
                     .contentShape(.rect)
                 }
-                .tint(Color.primary)
+                .accentColor(Color.primary)
                 .accessibilityElement(children: .combine)
                 .accessibilityAddTraits(model.isAccountStoreSelected ? .isSelected : [])
             } footer: {
@@ -71,7 +69,7 @@ private struct AccountStoreSection: View {
 }
 
 private struct StorefrontsSection: View {
-    @Environment(StorefrontModel.self) private var model
+    @EnvironmentObject private var model: StorefrontModel
 
     var body: some View {
         if !model.storefronts.isEmpty {
@@ -85,7 +83,7 @@ private struct StorefrontsSection: View {
 }
 
 private struct StorefrontRow: View {
-    @Environment(StorefrontModel.self) private var model
+    @EnvironmentObject private var model: StorefrontModel
     @Environment(\.close) private var close
     let storefront: Storefront
 
@@ -102,7 +100,7 @@ private struct StorefrontRow: View {
             }
             .contentShape(.rect)
         }
-        .tint(Color.primary)
+        .accentColor(Color.primary)
         .accessibilityElement(children: .combine)
         .accessibilityAddTraits(isSelected ? .isSelected : [])
     }

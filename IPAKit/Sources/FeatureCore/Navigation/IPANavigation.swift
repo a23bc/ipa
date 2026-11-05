@@ -1,14 +1,14 @@
-import Observation
+import Combine
 import SwiftUI
 
-@MainActor @Observable
-public final class IPANavigation {
-    public var selectedSection: AppSection = .search
-    public var paths: [AppSection: [Route]] = [:]
-    public var inspector: Inspector?
-    public var inspectorPath: [Route] = []
-    public var guide: Guide?
-    public var pendingSearch: String?
+@MainActor
+public final class IPANavigation: ObservableObject {
+    @Published public var selectedSection: AppSection = .search
+    @Published public var paths: [AppSection: [Route]] = [:]
+    @Published public var inspector: Inspector?
+    @Published public var inspectorPath: [Route] = []
+    @Published public var guide: Guide?
+    @Published public var pendingSearch: String?
     public init() {}
 
     public struct Inspector: Identifiable, Equatable {

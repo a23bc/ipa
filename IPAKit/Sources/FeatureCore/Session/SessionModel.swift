@@ -1,12 +1,12 @@
+import Combine
 import IPADomain
-import Observation
 
-@MainActor @Observable
-public final class SessionModel {
+@MainActor
+public final class SessionModel: ObservableObject {
     public let repositories: Repositories
     public let services: StoreServices
-    public private(set) var generation = 0
-    public private(set) var availability: EngineAvailability = .ready
+    @Published public private(set) var generation = 0
+    @Published public private(set) var availability: EngineAvailability = .ready
 
     public init(repositories: Repositories, services: StoreServices) {
         self.repositories = repositories

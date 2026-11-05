@@ -24,7 +24,7 @@ struct ThemePreview: View {
             }
         }
         .aspectRatio(CGSize.themeCanvas, contentMode: .fit)
-        .clipShape(.rect(cornerRadius: .radiusM, style: .continuous))
+        .clipShape(RoundedRectangle(cornerRadius: .radiusM, style: .continuous))
         .overlay {
             RoundedRectangle(cornerRadius: .radiusM, style: .continuous)
                 .stroke(.separator, lineWidth: 1)
@@ -36,7 +36,7 @@ struct ThemePreview: View {
 }
 
 private struct ThemeCanvas: View {
-    @Environment(SettingsModel.self) private var settings
+    @EnvironmentObject private var settings: SettingsModel
 
     var body: some View {
         let sample = settings.themeSample
@@ -52,7 +52,7 @@ private struct ThemeCanvas: View {
                 }
                 .padding(.spaceM)
                 .frame(maxWidth: .infinity)
-                .background(.groupedRow, in: .rect(cornerRadius: .radiusM))
+                .background(.groupedRow, in: RoundedRectangle(cornerRadius: .radiusM))
                 Spacer(minLength: 0)
                 ThemeCanvasTabBar(sample: sample)
             }
@@ -79,7 +79,7 @@ private struct ThemeCanvasRow: View {
                 Text(row.title).font(.rowTitle).lineLimit(1)
                 Spacer(minLength: 0)
             }
-            ProgressView(value: row.fraction).tint(appTint)
+            ProgressView(value: row.fraction).accentColor(appTint)
             Text(row.detail).font(.rowDetail).foregroundStyle(.secondary)
         }
     }
@@ -99,12 +99,12 @@ private struct ThemeCanvasTabBar: View {
             }
             .padding(.horizontal, .spaceM)
             .padding(.vertical, .spaceM)
-            .background(.groupedRow, in: .capsule)
+            .background(.groupedRow, in: Capsule())
             Spacer(minLength: 0)
             Image(systemName: AppSection.prominent.systemImage)
                 .foregroundStyle(.secondary)
                 .padding(.spaceM)
-                .background(.groupedRow, in: .circle)
+                .background(.groupedRow, in: Circle())
         }
         .font(.icon(.s))
         .shadow(color: .black.opacity(.opacityFill), radius: 6, y: 2)

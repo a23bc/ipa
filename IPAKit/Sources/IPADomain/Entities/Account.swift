@@ -18,7 +18,8 @@ public struct Account: Hashable, Sendable, Identifiable, Codable {
     public var initials: String {
         let trimmed = name.trimmingCharacters(in: .whitespaces)
         let local = email.split(separator: "@").first.map(String.init) ?? email
-        let source = trimmed.isEmpty ? local.replacing(/[._\-+]/, with: " ") : trimmed
+        let source = trimmed.isEmpty
+            ? local.replacingCharacters(in: CharacterSet(charactersIn: "._-+"), with: " ") : trimmed
         let words = source.split(whereSeparator: \.isWhitespace)
         let picked = words.count > 1 ? [words[0], words[words.count - 1]] : words
         return picked.compactMap { word in word.first(where: \.isLetter) ?? word.first }

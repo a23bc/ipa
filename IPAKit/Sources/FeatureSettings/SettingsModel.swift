@@ -1,10 +1,10 @@
+import Combine
 import FeatureCore
 import Foundation
 import IPADomain
-import Observation
 
-@MainActor @Observable
-public final class SettingsModel {
+@MainActor
+public final class SettingsModel: ObservableObject {
     public var appearance: Appearance {
         didSet { defaults.set(appearance.rawValue, forKey: Key.appearance) }
     }
@@ -24,8 +24,8 @@ public final class SettingsModel {
     }
     public let appIcon = AppIcon.standard
     public let info: AppInfo
-    @ObservationIgnored private let defaults: UserDefaults
-    @ObservationIgnored private let languageSetting: LanguageSetting
+    private let defaults: UserDefaults
+    private let languageSetting: LanguageSetting
 
     public init(
         defaults: UserDefaults = .standard, info: AppInfo = .main,

@@ -1,15 +1,15 @@
+import Combine
 import FeatureCore
 import Foundation
 import IPADomain
-import Observation
 
-@MainActor @Observable
-public final class StorefrontModel {
-    public var text = ""
-    @ObservationIgnored private let preferences: StorePreferences
-    @ObservationIgnored private let accounts: AccountsModel
-    @ObservationIgnored private let region: Storefront
-    @ObservationIgnored private let sorted: [Storefront]
+@MainActor
+public final class StorefrontModel: ObservableObject {
+    @Published public var text = ""
+    private let preferences: StorePreferences
+    private let accounts: AccountsModel
+    private let region: Storefront
+    private let sorted: [Storefront]
 
     public init(
         preferences: StorePreferences, accounts: AccountsModel, locale: Locale = .current

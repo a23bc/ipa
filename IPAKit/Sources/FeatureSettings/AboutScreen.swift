@@ -21,7 +21,7 @@ private struct AboutPage: View {
 }
 
 private struct AboutHeroSection: View {
-    @Environment(SettingsModel.self) private var settings
+    @EnvironmentObject private var settings: SettingsModel
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
     @State private var isShown = false
 
@@ -42,7 +42,7 @@ private struct AboutHeroSection: View {
             }
             .frame(maxWidth: .infinity)
             .padding(.vertical, .spaceM)
-            .animation(reduceMotion ? nil : .bouncy, value: isShown)
+            .animation(reduceMotion ? nil : .bouncySpring, value: isShown)
             .accessibilityElement(children: .combine)
             .task { isShown = true }
         }

@@ -11,7 +11,7 @@ extension View {
 }
 
 private struct EditorLifecycle: ViewModifier {
-    @Environment(SessionModel.self) private var session
+    @EnvironmentObject private var session: SessionModel
     @Environment(\.close) private var close
     let status: EditorStatus
     let trigger: AnyHashable
@@ -22,7 +22,7 @@ private struct EditorLifecycle: ViewModifier {
         content
             .task(id: trigger) { await load() }
             .dismissKeyboardOnScroll()
-            .onChange(of: status.isSaved) {
+            .change(of: status.isSaved) {
                 guard status.isSaved else { return }
                 close()
                 session.reload()

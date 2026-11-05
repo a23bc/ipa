@@ -1,16 +1,16 @@
+import Combine
 import Foundation
 import IPADomain
-import Observation
 
-@MainActor @Observable
-public final class DownloadCenter {
-    public private(set) var tasks: [DownloadTask] = []
-    public private(set) var records: [DownloadRecord] = []
-    public private(set) var hasLoaded = false
-    public var error: IPAError?
-    @ObservationIgnored private let repositories: Repositories
-    @ObservationIgnored private let services: StoreServices
-    @ObservationIgnored private var running: [String: Task<Void, Never>] = [:]
+@MainActor
+public final class DownloadCenter: ObservableObject {
+    @Published public private(set) var tasks: [DownloadTask] = []
+    @Published public private(set) var records: [DownloadRecord] = []
+    @Published public private(set) var hasLoaded = false
+    @Published public var error: IPAError?
+    private let repositories: Repositories
+    private let services: StoreServices
+    private var running: [String: Task<Void, Never>] = [:]
 
     public init(repositories: Repositories, services: StoreServices) {
         self.repositories = repositories

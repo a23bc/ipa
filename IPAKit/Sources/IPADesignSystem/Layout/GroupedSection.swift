@@ -34,7 +34,7 @@ struct GroupedSection: View {
                         }
                     }
                 }
-                .background(.groupedRow, in: .rect(cornerRadius: GroupedMetrics.cornerRadius))
+                .background(.groupedRow, in: RoundedRectangle(cornerRadius: GroupedMetrics.cornerRadius))
             }
             if !section.footer.isEmpty {
                 VStack(alignment: .leading) { section.footer }

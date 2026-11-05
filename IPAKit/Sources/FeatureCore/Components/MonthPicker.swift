@@ -33,8 +33,7 @@ public struct MonthPicker: View {
         MonthSummaryRow(calendar: calendar, isExpanded: isExpanded, tint: appTint) {
             withAnimation(reduceMotion ? nil : .snappy) { isExpanded.toggle() }
         }
-        .sensoryFeedback(.selection, trigger: selection)
-        .onChange(of: selection) { _, value in year = value.year }
+        .change(of: selection) { _, value in year = value.year }
         if isExpanded {
             VStack(spacing: .spaceS) {
                 MonthYearBar(
@@ -45,7 +44,6 @@ public struct MonthPicker: View {
                     .gesture(swipe)
             }
             .clipped()
-            .sensoryFeedback(.selection, trigger: year)
         }
     }
 
@@ -127,7 +125,7 @@ private struct MonthYearBar: View {
             if calendar.canJumpToToday {
                 Button("This Month", action: jumpToToday)
                     .font(.subheadline.weight(.semibold))
-                    .tint(tint)
+                    .accentColor(tint)
                     .transition(.opacity)
             }
             Group {
@@ -136,7 +134,7 @@ private struct MonthYearBar: View {
             }
             .labelStyle(.iconOnly)
             .font(.headline)
-            .tint(tint)
+            .accentColor(tint)
             .frame(minWidth: .rowHeight, minHeight: .rowHeight)
             .contentShape(.rect)
         }
@@ -192,7 +190,7 @@ private struct MonthCell: View {
             .foregroundStyle(foreground)
             .frame(maxWidth: .infinity, minHeight: .rowHeight)
             .background { background }
-            .contentShape(.capsule)
+            .contentShape(Capsule())
         }
         .buttonStyle(.plain)
         .accessibilityLabel(choice.fullTitle)

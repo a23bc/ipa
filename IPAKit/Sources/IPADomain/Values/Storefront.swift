@@ -23,7 +23,7 @@ public struct Storefront: Hashable, Sendable, Identifiable, Codable {
     }
 
     public static func current(locale: Locale = .current) -> Storefront {
-        locale.region.flatMap { Storefront(code: $0.identifier) } ?? .unitedStates
+        locale.regionCode.flatMap { Storefront(code: $0) } ?? .unitedStates
     }
 
     public static let unitedStates = Storefront(code: "US", id: "143441")

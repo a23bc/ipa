@@ -44,21 +44,17 @@ struct AboutShareSection: View {
 }
 
 private struct AboutShareButton: View {
-    @Environment(SettingsModel.self) private var settings
-    @Environment(AboutModel.self) private var about
+    @EnvironmentObject private var settings: SettingsModel
+    @EnvironmentObject private var about: AboutModel
 
     var body: some View {
         if let url = settings.info.shareURL {
-            ShareLink(
-                item: url, message: Text(about.shareMessage),
-                preview: SharePreview(
-                    "IPA", image: IPAResourceImage.appIcon(settings.appIcon.previewName))
-            ) {
+            ShareButton(items: [url, about.shareMessage]) {
                 label
             }
             .primaryButton()
         } else {
-            ShareLink(item: about.shareMessage) { label }
+            ShareButton(items: [about.shareMessage]) { label }
                 .primaryButton()
         }
     }
@@ -69,7 +65,7 @@ private struct AboutShareButton: View {
 }
 
 struct AboutLinksSection: View {
-    @Environment(SettingsModel.self) private var settings
+    @EnvironmentObject private var settings: SettingsModel
     @Environment(\.appTint) private var appTint
 
     var body: some View {
@@ -89,7 +85,7 @@ struct AboutLinksSection: View {
 }
 
 private struct AboutRateRow: View {
-    @Environment(SettingsModel.self) private var settings
+    @EnvironmentObject private var settings: SettingsModel
     @Environment(\.appTint) private var appTint
     @Environment(\.openURL) private var openURL
 
@@ -103,7 +99,7 @@ private struct AboutRateRow: View {
 }
 
 struct AboutCreditsSection: View {
-    @Environment(AboutModel.self) private var about
+    @EnvironmentObject private var about: AboutModel
 
     var body: some View {
         Section {

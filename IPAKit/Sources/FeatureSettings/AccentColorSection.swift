@@ -3,7 +3,7 @@ import IPADesignSystem
 import SwiftUI
 
 struct AccentColorSection: View {
-    @Environment(SettingsModel.self) private var settings
+    @EnvironmentObject private var settings: SettingsModel
     @Environment(\.appTint) private var appTint
 
     var body: some View {

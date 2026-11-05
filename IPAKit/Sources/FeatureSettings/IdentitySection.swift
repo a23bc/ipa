@@ -3,7 +3,7 @@ import IPADesignSystem
 import SwiftUI
 
 struct IdentitySection: View {
-    @Environment(StoreSettingsModel.self) private var store
+    @EnvironmentObject private var store: StoreSettingsModel
 
     var body: some View {
         @Bindable var store = store
@@ -16,7 +16,7 @@ struct IdentitySection: View {
                     symbol: "arrow.counterclockwise", color: .negative, titleColor: .negative)
             }
             .sheet(isPresented: $store.isConfirmingIdentity) {
-                IdentityChangeScreen().environment(store)
+                IdentityChangeScreen().environmentObject(store)
             }
         } header: {
             IdentityHero()
@@ -29,13 +29,13 @@ struct IdentitySection: View {
 }
 
 private struct IdentityHero: View {
-    @Environment(StoreSettingsModel.self) private var store
+    @EnvironmentObject private var store: StoreSettingsModel
     @Environment(\.appTint) private var appTint
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
 
     var body: some View {
         VStack(spacing: .spaceS) {
-            Chip(store.identityChip, color: appTint, shape: .capsule)
+            Chip(store.identityChip, color: appTint, shape: Capsule())
             Text(verbatim: store.identityText)
                 .font(.amountTitle)
                 .monospaced()
@@ -49,12 +49,12 @@ private struct IdentityHero: View {
         .frame(maxWidth: .infinity)
         .padding(.vertical, .spaceL)
         .accessibilityElement(children: .combine)
-        .animation(reduceMotion ? nil : .smooth, value: store.identityText)
+        .animation(reduceMotion ? nil : .smoothSpring, value: store.identityText)
     }
 }
 
 private struct IdentityChangeScreen: View {
-    @Environment(StoreSettingsModel.self) private var store
+    @EnvironmentObject private var store: StoreSettingsModel
     @Environment(\.dismiss) private var dismiss
 
     var body: some View {
@@ -78,7 +78,7 @@ private struct IdentityChangeScreen: View {
                 )
             }
         }
-        .tint(Color.negative)
+        .accentColor(Color.negative)
         .errorAlert($store.error)
     }
 }

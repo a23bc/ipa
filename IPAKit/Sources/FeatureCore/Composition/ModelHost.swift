@@ -1,7 +1,6 @@
-import Observation
 import SwiftUI
 
-public struct ModelHost<Model: Observable & AnyObject, Content: View>: View {
+public struct ModelHost<Model: ObservableObject, Content: View>: View {
     @State private var model: Model
     private let content: Content
 
@@ -11,6 +10,6 @@ public struct ModelHost<Model: Observable & AnyObject, Content: View>: View {
     }
 
     public var body: some View {
-        content.environment(model)
+        content.environmentObject(model)
     }
 }

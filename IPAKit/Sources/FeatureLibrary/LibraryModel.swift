@@ -1,18 +1,18 @@
+import Combine
 import FeatureCore
 import Foundation
 import IPADomain
-import Observation
 
 #if os(macOS)
     import AppKit
 #endif
 
-@MainActor @Observable
-public final class LibraryModel {
-    public var text = ""
-    public var deletion: DownloadRecord?
-    @ObservationIgnored let downloads: DownloadCenter
-    @ObservationIgnored let accounts: AccountsModel
+@MainActor
+public final class LibraryModel: ObservableObject {
+    @Published public var text = ""
+    @Published public var deletion: DownloadRecord?
+    let downloads: DownloadCenter
+    let accounts: AccountsModel
 
     public init(downloads: DownloadCenter, accounts: AccountsModel) {
         self.downloads = downloads

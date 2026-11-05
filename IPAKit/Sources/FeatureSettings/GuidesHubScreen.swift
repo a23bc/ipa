@@ -15,7 +15,6 @@ public struct GuidesHubScreen: View {
         }
         .readableWidth()
         .background(.groupedBackground)
-        .fontDesign(.rounded)
         .navigationTitle("Guides")
         #if os(iOS)
             .navigationBarTitleDisplayMode(.inline)
@@ -49,7 +48,7 @@ private struct GuideCard: View {
                 IPAAnimationView(guide.animation, isStill: true)
                     .frame(width: 96)
                     .padding(.spaceXS)
-                    .background(appTint.opacity(.opacityFill), in: .rect(cornerRadius: .radiusS))
+                    .background(appTint.opacity(.opacityFill), in: RoundedRectangle(cornerRadius: .radiusS))
                     .allowsHitTesting(false)
                 VStack(alignment: .leading, spacing: .space2XS) {
                     Text(verbatim: guide.title).font(.rowTitle)
@@ -68,6 +67,6 @@ private struct GuideCard: View {
             .contentShape(.rect)
         }
         .buttonStyle(.plain)
-        .background(.groupedRow, in: .rect(cornerRadius: .radiusM))
+        .background(.groupedRow, in: RoundedRectangle(cornerRadius: .radiusM))
     }
 }

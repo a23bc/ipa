@@ -27,7 +27,7 @@ public enum AppQuery: Hashable, Sendable {
     }
 
     private static func linkedID(in text: String) -> Int64? {
-        guard let url = URL(string: text), let host = url.host(),
+        guard let url = URL(string: text), let host = url.host,
             host.hasSuffix("apple.com")
         else { return nil }
         for component in url.pathComponents.reversed() where component.hasPrefix("id") {

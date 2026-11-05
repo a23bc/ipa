@@ -2,20 +2,29 @@ import FeatureCore
 import SwiftUI
 
 struct InspectorScreen: View {
-    @Environment(IPANavigation.self) private var navigation
+    @EnvironmentObject private var navigation: IPANavigation
     let inspector: IPANavigation.Inspector
 
     var body: some View {
-        @Bindable var navigation = navigation
-        NavigationStack(path: $navigation.inspectorPath) {
+        NavigationView {
             RouteScreen(route: inspector.route)
-                .navigationDestination(for: Route.self) { RouteScreen(route: $0) }
+                .background(
+                    PathLinks(
+                        path: navigation.inspectorPath,
+                        depth: 1,
+                        onPop: { count in
+                            navigation.inspectorPath = Array(navigation.inspectorPath.prefix(count))
+                        },
+                        destination: { RouteScreen(route: $0) }
+                    )
+                )
                 .toolbar {
                     ToolbarItem(placement: .primaryAction) {
                         Button("Close", systemImage: "xmark") { navigation.closeInspector() }
                     }
                 }
         }
+        .navigationViewStyle(.stack)
         .environment(\.navigationSection, inspector.section)
         .environment(
             \.close,

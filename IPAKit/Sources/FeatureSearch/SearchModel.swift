@@ -1,10 +1,10 @@
+import Combine
 import FeatureCore
 import Foundation
 import IPADomain
-import Observation
 
-@MainActor @Observable
-public final class SearchModel {
+@MainActor
+public final class SearchModel: ObservableObject {
     public enum Status: Hashable, Sendable {
         case idle, results, noResults
         case failed(IPAError)
@@ -16,16 +16,16 @@ public final class SearchModel {
         public let limit: Int
     }
 
-    public var text = ""
-    public private(set) var results: [StoreApp] = []
-    public private(set) var status: Status = .idle
-    public private(set) var isSearching = false
-    public private(set) var searchedStorefront: Storefront?
-    @ObservationIgnored private let session: SessionModel
-    @ObservationIgnored private let preferences: StorePreferences
-    @ObservationIgnored private let accounts: AccountsModel
-    @ObservationIgnored private let debounce: Duration
-    @ObservationIgnored private var request = 0
+    @Published public var text = ""
+    @Published public private(set) var results: [StoreApp] = []
+    @Published public private(set) var status: Status = .idle
+    @Published public private(set) var isSearching = false
+    @Published public private(set) var searchedStorefront: Storefront?
+    private let session: SessionModel
+    private let preferences: StorePreferences
+    private let accounts: AccountsModel
+    private let debounce: Duration
+    private var request = 0
 
     public init(
         session: SessionModel, preferences: StorePreferences, accounts: AccountsModel,

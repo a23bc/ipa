@@ -1,9 +1,8 @@
 import Foundation
 import IPADomain
-import Synchronization
 
 public final class InMemoryAccountVault: AccountVault {
-    private let state = Mutex(State())
+    private let state = LockedValue(State())
 
     public init(accounts: [Account] = []) {
         state.withLock { state in

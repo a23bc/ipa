@@ -2,19 +2,31 @@ import FeatureCore
 import SwiftUI
 
 struct SectionStack: View {
-    @Environment(IPANavigation.self) private var navigation
+    @EnvironmentObject private var navigation: IPANavigation
     let section: AppSection
 
+    private var path: [Route] { navigation.paths[section, default: []] }
+
+    private var closeAction: CloseAction {
+        CloseAction { navigation.close(in: section, inspecting: false) }
+    }
+
     var body: some View {
-        NavigationStack(path: navigation.path(for: section)) {
+        NavigationView {
             SectionScreen(section: section)
-                .navigationDestination(for: Route.self) { route in
-                    RouteScreen(route: route)
-                        .environment(
-                            \.close,
-                            CloseAction { navigation.close(in: section, inspecting: false) })
-                }
+                .environment(\.close, closeAction)
+                .background(
+                    PathLinks(
+                        path: path,
+                        depth: 1,
+                        onPop: { count in navigation.paths[section] = Array(path.prefix(count)) },
+                        destination: { route in
+                            RouteScreen(route: route).environment(\.close, closeAction)
+                        }
+                    )
+                )
         }
+        .navigationViewStyle(.stack)
         .environment(\.navigationSection, section)
     }
 }

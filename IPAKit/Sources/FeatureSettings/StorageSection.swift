@@ -3,7 +3,7 @@ import IPADesignSystem
 import SwiftUI
 
 struct StorageSection: View {
-    @Environment(StoreSettingsModel.self) private var store
+    @EnvironmentObject private var store: StoreSettingsModel
 
     var body: some View {
         @Bindable var store = store
@@ -16,7 +16,7 @@ struct StorageSection: View {
                     symbol: "trash", color: .negative, titleColor: .negative)
             }
             .sheet(isPresented: $store.isErasing, onDismiss: { store.closeErase() }) {
-                EraseScreen().environment(store)
+                EraseScreen().environmentObject(store)
             }
         } header: {
             StorageHero()
@@ -29,13 +29,13 @@ struct StorageSection: View {
 }
 
 private struct StorageHero: View {
-    @Environment(StoreSettingsModel.self) private var store
+    @EnvironmentObject private var store: StoreSettingsModel
     @Environment(\.appTint) private var appTint
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
 
     var body: some View {
         VStack(spacing: .spaceS) {
-            Chip(store.storageChip, color: appTint, shape: .capsule)
+            Chip(store.storageChip, color: appTint, shape: Capsule())
             Text(verbatim: store.usedSpaceText)
                 .font(.amountHero)
                 .foregroundStyle(Color.primary)
@@ -48,6 +48,6 @@ private struct StorageHero: View {
         .frame(maxWidth: .infinity)
         .padding(.vertical, .spaceL)
         .accessibilityElement(children: .combine)
-        .animation(reduceMotion ? nil : .smooth, value: store.usedBytes)
+        .animation(reduceMotion ? nil : .smoothSpring, value: store.usedBytes)
     }
 }

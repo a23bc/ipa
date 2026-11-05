@@ -39,19 +39,12 @@ public struct GuideSheet<Page: View>: View {
         }
         .padding([.horizontal, .bottom], .spaceXL)
         .padding(.top, .spaceL)
-        .fontDesign(.rounded)
-        .animation(.smooth, value: index)
-        .onChange(of: index, initial: true) { shownIndex = index }
+        .animation(.smoothSpring, value: index)
+        .change(of: index, initial: true) { shownIndex = index }
         .fixedSize(horizontal: false, vertical: true)
-        .onGeometryChange(for: CGFloat.self) {
-            $0.size.height
-        } action: {
-            height = $0
-        }
-        .presentationDetents([.height(height)])
+        .onSizeChange { height = $0.height }
         .presentationDragIndicator(.hidden)
         #if !os(visionOS)
-            .presentationBackground(.sheetBackground)
         #endif
         #if os(iOS)
             .modifier(GuidePlacement())

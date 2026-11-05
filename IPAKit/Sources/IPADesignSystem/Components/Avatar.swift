@@ -20,8 +20,14 @@ public struct Avatar: View {
     public var body: some View {
         glyph
             .frame(width: size, height: size)
-            .background(background, in: .circle)
-            .clipShape(.circle)
+            .background {
+                if case .image = content {
+                    Circle().fill(Color.subtleFill)
+                } else {
+                    Circle().fill(color.gradient)
+                }
+            }
+            .clipShape(Circle())
             .accessibilityElement(children: .ignore)
             .accessibilityAddTraits(.isImage)
     }
@@ -44,10 +50,5 @@ public struct Avatar: View {
                 .resizable()
                 .scaledToFill()
         }
-    }
-
-    private var background: AnyShapeStyle {
-        if case .image = content { return AnyShapeStyle(.subtleFill) }
-        return AnyShapeStyle(color.gradient)
     }
 }

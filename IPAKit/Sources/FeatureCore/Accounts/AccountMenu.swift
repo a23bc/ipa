@@ -3,7 +3,7 @@ import IPADomain
 import SwiftUI
 
 public struct AccountMenu: View {
-    @Environment(AccountsModel.self) private var accounts
+    @EnvironmentObject private var accounts: AccountsModel
     @Environment(\.open) private var open
     @Environment(\.navigationSection) private var section
     @Environment(\.displayScale) private var displayScale

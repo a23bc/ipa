@@ -2,7 +2,7 @@ import IPADomain
 import SwiftUI
 
 struct LanguageSection: View {
-    @Environment(SettingsModel.self) private var settings
+    @EnvironmentObject private var settings: SettingsModel
 
     var body: some View {
         @Bindable var settings = settings

@@ -12,7 +12,7 @@ public struct AppArtwork: View {
     }
 
     public var body: some View {
-        AsyncImage(url: url, transaction: Transaction(animation: reduceMotion ? nil : .smooth)) {
+        AsyncImage(url: url, transaction: Transaction(animation: reduceMotion ? nil : .smoothSpring)) {
             phase in
             if case .success(let image) = phase {
                 image.resizable().scaledToFill()
@@ -25,7 +25,7 @@ public struct AppArtwork: View {
             }
         }
         .frame(width: size, height: size)
-        .clipShape(.rect(cornerRadius: size * 0.2237, style: .continuous))
+        .clipShape(RoundedRectangle(cornerRadius: size * 0.2237, style: .continuous))
         .overlay {
             RoundedRectangle(cornerRadius: size * 0.2237, style: .continuous)
                 .strokeBorder(.separator, lineWidth: 1)

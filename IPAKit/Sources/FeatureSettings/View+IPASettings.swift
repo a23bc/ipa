@@ -3,19 +3,19 @@ import SwiftUI
 
 extension View {
     public func ipaSettings(_ settings: SettingsModel) -> some View {
-        modifier(AppearanceModifier()).environment(settings)
+        modifier(AppearanceModifier()).environmentObject(settings)
     }
 }
 
 private struct AppearanceModifier: ViewModifier {
-    @Environment(SettingsModel.self) private var settings
+    @EnvironmentObject private var settings: SettingsModel
 
     func body(content: Content) -> some View {
         content
             .appTint(Color(hex: settings.tint))
             .environment(\.locale, settings.locale)
-            .onChange(of: settings.appearance, initial: true) { settings.appearance.apply() }
-            .onChange(of: settings.tint, initial: true) {
+            .change(of: settings.appearance, initial: true) { settings.appearance.apply() }
+            .change(of: settings.tint, initial: true) {
                 Appearance.applyTint(Color(hex: settings.tint))
             }
     }

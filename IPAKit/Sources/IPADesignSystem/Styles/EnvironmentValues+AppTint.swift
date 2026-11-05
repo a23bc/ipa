@@ -1,7 +1,14 @@
 import SwiftUI
 
+private struct AppTintKey: EnvironmentKey {
+    static var defaultValue: Color { .accentColor }
+}
+
 extension EnvironmentValues {
-    @Entry public var appTint: Color = .accentColor
+    public var appTint: Color {
+        get { self[AppTintKey.self] }
+        set { self[AppTintKey.self] = newValue }
+    }
 }
 
 extension View {

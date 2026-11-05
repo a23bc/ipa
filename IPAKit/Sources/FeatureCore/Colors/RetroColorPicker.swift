@@ -19,7 +19,6 @@ public struct RetroColorPicker: View {
             }
         }
         .padding(.vertical, .spaceS)
-        .sensoryFeedback(.selection, trigger: hex)
     }
 }
 
@@ -46,7 +45,7 @@ private struct ColorChoice: View {
                     }
                 }
                 .frame(width: 44, height: 44)
-                .contentShape(.circle)
+                .contentShape(Circle())
         }
         .buttonStyle(.plain)
         .accessibilityLabel(color.name)

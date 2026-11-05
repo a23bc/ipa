@@ -1,35 +1,35 @@
+import Combine
 import FeatureCore
 import Foundation
 import IPADomain
-import Observation
 
-@MainActor @Observable
-public final class SignInModel {
+@MainActor
+public final class SignInModel: ObservableObject {
     public enum Step: Hashable, Sendable {
         case credentials, code
     }
 
     public static let codeLength = 6
 
-    public var email = "" {
+    @Published public var email = "" {
         didSet { if email != oldValue { failure = nil } }
     }
-    public var password = "" {
+    @Published public var password = "" {
         didSet { if password != oldValue { failure = nil } }
     }
-    public var code = "" {
+    @Published public var code = "" {
         didSet {
             let digits = String(code.filter(\.isNumber).prefix(Self.codeLength))
             if digits != code { code = digits }
             if code != oldValue { failure = nil }
         }
     }
-    public private(set) var step: Step = .credentials
-    public private(set) var isWorking = false
-    public private(set) var failure: String?
-    public var error: IPAError?
-    @ObservationIgnored private let session: SessionModel
-    @ObservationIgnored private let accounts: AccountsModel
+    @Published public private(set) var step: Step = .credentials
+    @Published public private(set) var isWorking = false
+    @Published public private(set) var failure: String?
+    @Published public var error: IPAError?
+    private let session: SessionModel
+    private let accounts: AccountsModel
 
     public init(session: SessionModel, accounts: AccountsModel) {
         self.session = session

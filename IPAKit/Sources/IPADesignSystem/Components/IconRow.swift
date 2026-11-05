@@ -38,7 +38,7 @@ public struct IconRow: View {
                 .font(.icon(.s, weight: .medium))
                 .foregroundStyle(color)
                 .frame(width: .badgeS + .space2XS, height: .badgeS + .space2XS)
-                .background(color.opacity(.opacityTint), in: .rect(cornerRadius: .radiusS))
+                .background(color.opacity(.opacityTint), in: RoundedRectangle(cornerRadius: .radiusS))
                 .accessibilityHidden(true)
             VStack(alignment: .leading, spacing: .spaceHairline) {
                 title.foregroundStyle(titleColor)

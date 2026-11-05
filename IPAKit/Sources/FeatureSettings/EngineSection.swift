@@ -3,7 +3,7 @@ import IPADesignSystem
 import SwiftUI
 
 struct EngineSection: View {
-    @Environment(StoreSettingsModel.self) private var store
+    @EnvironmentObject private var store: StoreSettingsModel
     @Environment(\.showGuide) private var showGuide
     @Environment(\.appTint) private var appTint
 
@@ -33,14 +33,14 @@ struct EngineSection: View {
 }
 
 private struct EngineHero: View {
-    @Environment(StoreSettingsModel.self) private var store
+    @EnvironmentObject private var store: StoreSettingsModel
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
 
     var body: some View {
         VStack(spacing: .spaceM) {
             IPAAnimationView(.jit).frame(maxWidth: 260)
             VStack(spacing: .spaceS) {
-                Chip(store.engineTitle, color: store.engineColor, shape: .capsule)
+                Chip(store.engineTitle, color: store.engineColor, shape: Capsule())
                     .contentTransition(.opacity)
                 Text(verbatim: store.engineCaption)
                     .font(.subheadline)
@@ -52,6 +52,6 @@ private struct EngineHero: View {
         .multilineTextAlignment(.center)
         .frame(maxWidth: .infinity)
         .padding(.vertical, .spaceL)
-        .animation(reduceMotion ? nil : .smooth, value: store.availability)
+        .animation(reduceMotion ? nil : .smoothSpring, value: store.availability)
     }
 }

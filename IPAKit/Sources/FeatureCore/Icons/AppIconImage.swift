@@ -15,7 +15,7 @@ public struct AppIconImage: View {
             .resizable()
             .scaledToFit()
             .frame(width: size, height: size)
-            .clipShape(.rect(cornerRadius: size * 0.2237, style: .continuous))
+            .clipShape(RoundedRectangle(cornerRadius: size * 0.2237, style: .continuous))
             .accessibilityHidden(true)
     }
 }

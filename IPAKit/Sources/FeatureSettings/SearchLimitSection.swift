@@ -3,7 +3,7 @@ import IPADesignSystem
 import SwiftUI
 
 struct SearchLimitSection: View {
-    @Environment(StoreSettingsModel.self) private var store
+    @EnvironmentObject private var store: StoreSettingsModel
 
     var body: some View {
         @Bindable var store = store
@@ -15,7 +15,6 @@ struct SearchLimitSection: View {
             }
             .labelsHidden()
             .pickerStyle(.inline)
-            .sensoryFeedback(.selection, trigger: store.resultsLimit)
         } header: {
             Text("Results per Search").sectionTitle()
         } footer: {

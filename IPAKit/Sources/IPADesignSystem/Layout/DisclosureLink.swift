@@ -1,7 +1,14 @@
 import SwiftUI
 
+private struct IsGroupedColumnKey: EnvironmentKey {
+    static var defaultValue: Bool { false }
+}
+
 extension EnvironmentValues {
-    @Entry public var isGroupedColumn = false
+    public var isGroupedColumn: Bool {
+        get { self[IsGroupedColumnKey.self] }
+        set { self[IsGroupedColumnKey.self] = newValue }
+    }
 }
 
 public struct DisclosureLink<Label: View, Destination: View>: View {

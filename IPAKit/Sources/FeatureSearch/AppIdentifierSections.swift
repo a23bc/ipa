@@ -4,14 +4,14 @@ import IPADomain
 import SwiftUI
 
 struct AppIdentifiersSection: View {
-    @Environment(AppModel.self) private var model
+    @EnvironmentObject private var model: AppModel
 
     var body: some View {
         if !model.identifiers.isEmpty {
             Section {
                 ForEach(model.identifiers) { IdentifierRow(identifier: $0) }
                 if let url = model.shareURL {
-                    ShareLink(item: url) {
+                    ShareButton(items: [url]) {
                         Label("Share Link", systemImage: "square.and.arrow.up")
                             .font(.buttonLabel)
                     }
@@ -26,7 +26,7 @@ struct AppIdentifiersSection: View {
 }
 
 private struct IdentifierRow: View {
-    @Environment(AppModel.self) private var model
+    @EnvironmentObject private var model: AppModel
     let identifier: AppIdentifier
 
     var body: some View {
@@ -51,14 +51,14 @@ private struct IdentifierRow: View {
             }
             .contentShape(.rect)
         }
-        .tint(Color.primary)
+        .accentColor(Color.primary)
         .accessibilityElement(children: .combine)
         .accessibilityHint("Copies to the clipboard")
     }
 }
 
 struct AppVersionIDSection: View {
-    @Environment(AppModel.self) private var model
+    @EnvironmentObject private var model: AppModel
 
     var body: some View {
         @Bindable var model = model

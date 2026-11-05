@@ -14,6 +14,5 @@ extension View {
             .controlSize(.large)
             .buttonSizing(.flexible)
             .font(.headline.weight(.bold))
-            .fontDesign(.rounded)
     }
 }

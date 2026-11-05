@@ -22,10 +22,10 @@ public struct IPAWindow {
 
 extension View {
     public func ipaWindow(_ window: IPAWindow) -> some View {
-        environment(window.session)
-            .environment(window.navigation)
-            .environment(window.preferences)
-            .environment(window.accounts)
-            .environment(window.downloads)
+        environmentObject(window.session)
+            .environmentObject(window.navigation)
+            .environmentObject(window.preferences)
+            .environmentObject(window.accounts)
+            .environmentObject(window.downloads)
     }
 }

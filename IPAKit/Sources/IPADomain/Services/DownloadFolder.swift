@@ -8,16 +8,15 @@ public struct DownloadFolder: Hashable, Sendable {
     }
 
     public static var documents: DownloadFolder {
-        DownloadFolder(
-            root: URL.documentsDirectory.appending(path: "Downloads", directoryHint: .isDirectory))
+        DownloadFolder(root: URL.compatibleDocumentsDirectory.appendingPathComponent("Downloads"))
     }
 
     public func folder(for email: String) -> URL {
-        root.appending(path: PackageName.folder(email: email), directoryHint: .isDirectory)
+        root.appendingPathComponent(PackageName.folder(email: email))
     }
 
     public func fileURL(for record: DownloadRecord) -> URL {
-        folder(for: record.accountEmail).appending(path: record.fileName)
+        folder(for: record.accountEmail).appendingPathComponent(record.fileName)
     }
 
     public func prepareFolder(for email: String) throws -> URL {
@@ -28,14 +27,14 @@ public struct DownloadFolder: Hashable, Sendable {
 
     public func remove(_ record: DownloadRecord) throws {
         let url = fileURL(for: record)
-        guard FileManager.default.fileExists(atPath: url.path(percentEncoded: false)) else {
+        guard FileManager.default.fileExists(atPath: url.path) else {
             return
         }
         try FileManager.default.removeItem(at: url)
     }
 
     public func removeAll() throws {
-        guard FileManager.default.fileExists(atPath: root.path(percentEncoded: false)) else {
+        guard FileManager.default.fileExists(atPath: root.path) else {
             return
         }
         try FileManager.default.removeItem(at: root)

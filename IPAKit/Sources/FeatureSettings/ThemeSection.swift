@@ -2,7 +2,7 @@ import IPADesignSystem
 import SwiftUI
 
 struct ThemeSection: View {
-    @Environment(SettingsModel.self) private var settings
+    @EnvironmentObject private var settings: SettingsModel
 
     var body: some View {
         Section {
@@ -10,7 +10,6 @@ struct ThemeSection: View {
                 ForEach(Appearance.allCases) { ThemeChoice(appearance: $0) }
             }
             .padding(.vertical, .spaceS)
-            .sensoryFeedback(.selection, trigger: settings.appearance)
         } header: {
             Text("Theme").sectionTitle()
         } footer: {
@@ -20,7 +19,7 @@ struct ThemeSection: View {
 }
 
 private struct ThemeChoice: View {
-    @Environment(SettingsModel.self) private var settings
+    @EnvironmentObject private var settings: SettingsModel
     @Environment(\.appTint) private var appTint
     let appearance: Appearance
 

@@ -15,7 +15,7 @@ public struct SegmentedBar: View {
         HStack(spacing: .spaceS) {
             ForEach(0..<count, id: \.self) { index in
                 ProgressView(value: min(max(value - Double(index), 0), 1), total: 1)
-                    .tint(color)
+                    .accentColor(color)
             }
         }
         .accessibilityHidden(true)

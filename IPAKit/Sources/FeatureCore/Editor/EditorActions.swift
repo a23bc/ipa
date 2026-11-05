@@ -23,12 +23,12 @@ public struct EditorActions: ToolbarContent {
         ToolbarItemGroup {
             if canRemove {
                 Button("Delete", systemImage: "trash") { Task { await remove() } }
-                    .tint(Color.primary)
+                    .accentColor(Color.primary)
             }
             Button("Save", systemImage: "checkmark") { Task { await save() } }
                 .prominentButton()
                 .disabled(!canSave)
-                .tint(canSave ? appTint : .disabled)
+                .accentColor(canSave ? appTint : .disabled)
         }
     }
 }

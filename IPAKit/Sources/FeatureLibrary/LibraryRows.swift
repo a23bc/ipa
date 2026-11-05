@@ -4,7 +4,7 @@ import IPADomain
 import SwiftUI
 
 struct DownloadTaskRow: View {
-    @Environment(LibraryModel.self) private var library
+    @EnvironmentObject private var library: LibraryModel
     @Environment(\.appTint) private var appTint
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
     let task: DownloadTask
@@ -26,15 +26,15 @@ struct DownloadTaskRow: View {
                     Button("Cancel Download", systemImage: "xmark") { library.cancel(task) }
                         .labelStyle(.iconOnly)
                         .buttonStyle(.borderless)
-                        .tint(Color.secondary)
+                        .accentColor(Color.secondary)
                         .frame(minWidth: .rowHeight, minHeight: .rowHeight)
                         .contentShape(.rect)
                 }
             }
             if task.failure == nil {
                 ProgressView(value: progress)
-                    .tint(appTint)
-                    .animation(reduceMotion ? nil : .smooth, value: progress)
+                    .accentColor(appTint)
+                    .animation(reduceMotion ? nil : .smoothSpring, value: progress)
                     .accessibilityHidden(true)
             }
             Text(verbatim: library.statusText(for: task))
@@ -45,7 +45,7 @@ struct DownloadTaskRow: View {
                 HStack(spacing: .spaceL) {
                     Button("Retry", systemImage: "arrow.clockwise") { library.retry(task) }
                     Button("Dismiss", systemImage: "xmark") { library.cancel(task) }
-                        .tint(Color.secondary)
+                        .accentColor(Color.secondary)
                 }
                 .font(.buttonLabel)
                 .buttonStyle(.borderless)
@@ -56,7 +56,7 @@ struct DownloadTaskRow: View {
 }
 
 struct DownloadRecordRow: View {
-    @Environment(LibraryModel.self) private var library
+    @EnvironmentObject private var library: LibraryModel
     let record: DownloadRecord
 
     var body: some View {
@@ -75,7 +75,7 @@ struct DownloadRecordRow: View {
                 .frame(maxWidth: .infinity, alignment: .leading)
             }
             .accessibilityElement(children: .combine)
-            ShareLink(item: url) {
+            ShareButton(items: [url]) {
                 Label("Share", systemImage: "square.and.arrow.up")
             }
             .labelStyle(.iconOnly)
@@ -87,12 +87,12 @@ struct DownloadRecordRow: View {
             Button("Delete", systemImage: "trash", role: .destructive) {
                 library.deletion = record
             }
-            ShareLink(item: url) {
+            ShareButton(items: [url]) {
                 Label("Share", systemImage: "square.and.arrow.up")
             }
         }
         .contextMenu {
-            ShareLink(item: url) {
+            ShareButton(items: [url]) {
                 Label("Share", systemImage: "square.and.arrow.up")
             }
             #if os(macOS)

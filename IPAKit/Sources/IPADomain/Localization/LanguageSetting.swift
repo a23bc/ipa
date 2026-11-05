@@ -1,35 +1,31 @@
+import Combine
 import Foundation
-import Observation
-import Synchronization
 
-@Observable
-public final class LanguageSetting: Sendable {
+public final class LanguageSetting: ObservableObject, Sendable {
     public static let shared = LanguageSetting()
 
-    @ObservationIgnored private let storage: Mutex<Resolved>
+    private let storage: LockedValue<Resolved>
 
     public init(language: AppLanguage = .system) {
-        storage = Mutex(Resolved(language))
+        storage = LockedValue(Resolved(language))
     }
 
     public var language: AppLanguage {
         get {
-            access(keyPath: \.language)
-            return storage.withLock { $0.language }
+            storage.withLock { $0.language }
         }
         set {
-            withMutation(keyPath: \.language) { storage.withLock { $0 = Resolved(newValue) } }
+            objectWillChange.send()
+            storage.withLock { $0 = Resolved(newValue) }
         }
     }
 
     public var locale: Locale {
-        access(keyPath: \.language)
-        return storage.withLock { $0.locale }
+        storage.withLock { $0.locale }
     }
 
     public var bundle: Bundle {
-        access(keyPath: \.language)
-        return storage.withLock { $0.bundle }
+        storage.withLock { $0.bundle }
     }
 
     private struct Resolved: @unchecked Sendable {

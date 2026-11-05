@@ -12,7 +12,6 @@ public struct SelectionMark: View {
         Image(systemName: isSelected ? "checkmark.circle.fill" : "circle")
             .font(.icon(.m))
             .foregroundStyle(isSelected ? appTint : Color.secondary)
-            .contentTransition(.symbolEffect(.replace))
             .accessibilityHidden(true)
     }
 }

@@ -1,13 +1,13 @@
+import Combine
 import IPADomain
-import Observation
 
-@MainActor @Observable
-public final class EditorStatus {
-    public private(set) var isLoaded = false
-    public private(set) var isBusy = false
-    public private(set) var isSaved = false
-    public var error: IPAError?
-    @ObservationIgnored private var loadRequest = 0
+@MainActor
+public final class EditorStatus: ObservableObject {
+    @Published public private(set) var isLoaded = false
+    @Published public private(set) var isBusy = false
+    @Published public private(set) var isSaved = false
+    @Published public var error: IPAError?
+    private var loadRequest = 0
 
     public init() {}
 

@@ -3,7 +3,7 @@ import IPADesignSystem
 import SwiftUI
 
 struct EraseScreen: View {
-    @Environment(StoreSettingsModel.self) private var store
+    @EnvironmentObject private var store: StoreSettingsModel
     @Environment(\.appTint) private var appTint
 
     var body: some View {
@@ -24,7 +24,7 @@ struct EraseScreen: View {
                 }
             }
         }
-        .tint(store.eraseStep == .confirm ? Color.negative : appTint)
+        .accentColor(store.eraseStep == .confirm ? Color.negative : appTint)
         .errorAlert($store.error)
     }
 
@@ -44,7 +44,7 @@ struct EraseScreen: View {
 }
 
 private struct EraseConfirmPage: View {
-    @Environment(StoreSettingsModel.self) private var store
+    @EnvironmentObject private var store: StoreSettingsModel
 
     var body: some View {
         GuidePage(

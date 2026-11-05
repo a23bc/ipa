@@ -1,16 +1,16 @@
+import Combine
 import Foundation
 import IPADomain
-import Observation
 
-@MainActor @Observable
-public final class AccountsModel {
-    public private(set) var accounts: [Account] = []
-    public private(set) var activeEmail: String?
-    public private(set) var hasLoaded = false
-    public var error: IPAError?
-    public var removal: Account?
-    @ObservationIgnored private let vault: any AccountVault
-    @ObservationIgnored private let defaults: UserDefaults
+@MainActor
+public final class AccountsModel: ObservableObject {
+    @Published public private(set) var accounts: [Account] = []
+    @Published public private(set) var activeEmail: String?
+    @Published public private(set) var hasLoaded = false
+    @Published public var error: IPAError?
+    @Published public var removal: Account?
+    private let vault: any AccountVault
+    private let defaults: UserDefaults
 
     public init(vault: any AccountVault, defaults: UserDefaults = .standard) {
         self.vault = vault

@@ -22,11 +22,13 @@ public struct SymbolBadge: View {
             .font(.system(size: size * 0.45, weight: .semibold))
             .foregroundStyle(style == .filled ? Color.white : color)
             .frame(width: size, height: size)
-            .background(
-                style == .filled
-                    ? AnyShapeStyle(color.gradient) : AnyShapeStyle(color.opacity(.opacityTint)),
-                in: .circle
-            )
+            .background {
+                if style == .filled {
+                    Circle().fill(color.gradient)
+                } else {
+                    Circle().fill(color.opacity(.opacityTint))
+                }
+            }
             .accessibilityHidden(true)
     }
 }

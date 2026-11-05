@@ -39,7 +39,7 @@ private struct GlassSurface<S: InsettableShape>: ViewModifier {
             content.background(tint ?? .clear, in: shape).glassBackgroundEffect(in: shape)
         #else
             content.glassEffect(
-                .regular.tint(tint).interactive(interactive && isEnabled), in: shape)
+                .regular.accentColor(tint).interactive(interactive && isEnabled), in: shape)
         #endif
     }
 }

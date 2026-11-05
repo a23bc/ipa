@@ -70,6 +70,13 @@ public struct ShowGuideAction {
     }
 }
 
+private struct ShowGuideKey: EnvironmentKey {
+    static var defaultValue: ShowGuideAction? { nil }
+}
+
 extension EnvironmentValues {
-    @Entry public var showGuide: ShowGuideAction?
+    public var showGuide: ShowGuideAction? {
+        get { self[ShowGuideKey.self] }
+        set { self[ShowGuideKey.self] = newValue }
+    }
 }

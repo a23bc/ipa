@@ -3,7 +3,7 @@ import IPADesignSystem
 import SwiftUI
 
 public struct SignInScreen: View {
-    @Environment(SignInModel.self) private var model
+    @EnvironmentObject private var model: SignInModel
 
     public init() {}
 
@@ -17,7 +17,6 @@ public struct SignInScreen: View {
             }
             SignInButtonSection()
         }
-        .fontDesign(.rounded)
         .readableWidth()
         .errorAlert($model.error)
         .task { await model.refreshAvailability() }
@@ -29,7 +28,7 @@ public struct SignInScreen: View {
 }
 
 private struct SignInEngineSection: View {
-    @Environment(SignInModel.self) private var model
+    @EnvironmentObject private var model: SignInModel
 
     var body: some View {
         if model.availability != .ready {
@@ -43,7 +42,7 @@ private struct SignInEngineSection: View {
 }
 
 private struct SignInCredentialsSection: View {
-    @Environment(SignInModel.self) private var model
+    @EnvironmentObject private var model: SignInModel
     @Environment(\.close) private var close
     @FocusState private var focus: Field?
 
@@ -79,7 +78,7 @@ private struct SignInCredentialsSection: View {
 }
 
 private struct SignInCodeSection: View {
-    @Environment(SignInModel.self) private var model
+    @EnvironmentObject private var model: SignInModel
     @FocusState private var isFocused: Bool
 
     var body: some View {
@@ -104,7 +103,7 @@ private struct SignInCodeSection: View {
 }
 
 private struct SignInButtonSection: View {
-    @Environment(SignInModel.self) private var model
+    @EnvironmentObject private var model: SignInModel
     @Environment(\.close) private var close
 
     var body: some View {

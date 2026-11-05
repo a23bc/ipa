@@ -1,21 +1,21 @@
+import Combine
 import Foundation
 import IPADomain
-import Observation
 
-@MainActor @Observable
-public final class StorePreferences {
+@MainActor
+public final class StorePreferences: ObservableObject {
     public static let limits = [25, 50, 100, 200]
     public static let defaultLimit = 50
 
-    public var storefront: Storefront? {
+    @Published public var storefront: Storefront? {
         didSet { defaults.set(storefront?.code, forKey: Key.storefront) }
     }
 
-    public var resultsLimit: Int {
+    @Published public var resultsLimit: Int {
         didSet { defaults.set(resultsLimit, forKey: Key.limit) }
     }
 
-    @ObservationIgnored private let defaults: UserDefaults
+    private let defaults: UserDefaults
 
     public init(defaults: UserDefaults = .standard) {
         self.defaults = defaults

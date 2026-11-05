@@ -3,28 +3,26 @@ import IPADesignSystem
 import SwiftUI
 
 struct StoreSettingsHost: View {
-    @Environment(SettingsModel.self) private var settings
-    @Environment(SessionModel.self) private var session: SessionModel?
-    @Environment(StorePreferences.self) private var preferences: StorePreferences?
-    @Environment(AccountsModel.self) private var accounts: AccountsModel?
-    @Environment(DownloadCenter.self) private var downloads: DownloadCenter?
+    @EnvironmentObject private var settings: SettingsModel
+    @EnvironmentObject private var session: SessionModel
+    @EnvironmentObject private var preferences: StorePreferences
+    @EnvironmentObject private var accounts: AccountsModel
+    @EnvironmentObject private var downloads: DownloadCenter
 
     var body: some View {
-        if let session, let preferences, let accounts, let downloads {
-            ModelHost(
-                StoreSettingsModel(
-                    settings: settings, session: session, preferences: preferences,
-                    accounts: accounts, downloads: downloads)
-            ) {
-                StoreRowsSection()
-                StorageRowSection()
-            }
+        ModelHost(
+            StoreSettingsModel(
+                settings: settings, session: session, preferences: preferences,
+                accounts: accounts, downloads: downloads)
+        ) {
+            StoreRowsSection()
+            StorageRowSection()
         }
     }
 }
 
 private struct StoreRowsSection: View {
-    @Environment(StoreSettingsModel.self) private var store
+    @EnvironmentObject private var store: StoreSettingsModel
 
     var body: some View {
         Section {
@@ -32,19 +30,19 @@ private struct StoreRowsSection: View {
                 "Search", symbol: "magnifyingglass", color: RetroColor.terracotta.color,
                 value: store.resultsValue
             ) {
-                SettingsPage("Search") { SearchLimitSection() }.environment(store)
+                SettingsPage("Search") { SearchLimitSection() }.environmentObject(store)
             }
             SettingsRow(
                 "Device Identity", symbol: "number", color: RetroColor.mustard.color,
                 value: store.identityValue
             ) {
-                SettingsPage("Device Identity") { IdentitySection() }.environment(store)
+                SettingsPage("Device Identity") { IdentitySection() }.environmentObject(store)
             }
             SettingsRow(
                 "Store Engine", symbol: "bolt", color: RetroColor.plum.color,
                 value: store.engineTitle
             ) {
-                SettingsPage("Store Engine") { EngineSection() }.environment(store)
+                SettingsPage("Store Engine") { EngineSection() }.environmentObject(store)
             }
         } header: {
             Text("Store")
@@ -54,7 +52,7 @@ private struct StoreRowsSection: View {
 }
 
 private struct StorageRowSection: View {
-    @Environment(StoreSettingsModel.self) private var store
+    @EnvironmentObject private var store: StoreSettingsModel
 
     var body: some View {
         Section {
@@ -62,7 +60,7 @@ private struct StorageRowSection: View {
                 "Storage", symbol: "externaldrive", color: RetroColor.slate.color,
                 value: store.usedSpaceText
             ) {
-                SettingsPage("Storage") { StorageSection() }.environment(store)
+                SettingsPage("Storage") { StorageSection() }.environmentObject(store)
             }
         } header: {
             Text("Data")

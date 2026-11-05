@@ -4,7 +4,7 @@ import IPADomain
 import SwiftUI
 
 public struct AppScreen: View {
-    @Environment(AppModel.self) private var model
+    @EnvironmentObject private var model: AppModel
 
     public init() {}
 
@@ -19,10 +19,7 @@ public struct AppScreen: View {
             }
         }
         .overlay { AppFailureView() }
-        .fontDesign(.rounded)
         .sheet(item: $model.confirmation) { VersionSheet(choice: $0) }
-        .sensoryFeedback(.success, trigger: model.copyCount)
-        .sensoryFeedback(.start, trigger: model.startCount)
         .errorAlert($model.error)
         .refreshable { await model.load() }
         .task(id: model.loadKey) { await model.load() }
@@ -34,13 +31,13 @@ public struct AppScreen: View {
 }
 
 private struct AppFailureView: View {
-    @Environment(AppModel.self) private var model
+    @EnvironmentObject private var model: AppModel
     @Environment(\.open) private var open
     @Environment(\.navigationSection) private var section
 
     var body: some View {
         if model.app == nil, !model.isLoading, model.loadFailure != nil {
-            ContentUnavailableView {
+            UnavailableState {
                 Label {
                     Text(verbatim: model.loadFailureTitle)
                 } icon: {
@@ -62,7 +59,7 @@ private struct AppFailureView: View {
 }
 
 private struct VersionSheet: View {
-    @Environment(AppModel.self) private var model
+    @EnvironmentObject private var model: AppModel
     let choice: VersionChoice
 
     var body: some View {

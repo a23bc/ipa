@@ -1,25 +1,25 @@
+import Combine
 import AppShell
 import FeatureCore
 import FeatureSettings
 import IPAData
-import Observation
 import SwiftUI
 
 @main
 struct IPAApp: App {
-    @State private var settings: SettingsModel
-    @State private var bootstrap: IPABootstrap
+    @StateObject private var settings: SettingsModel
+    @StateObject private var bootstrap: IPABootstrap
 
     init() {
         let settings = SettingsModel()
-        _settings = State(initialValue: settings)
-        _bootstrap = State(initialValue: IPABootstrap())
+        _settings = StateObject(wrappedValue: settings)
+        _bootstrap = StateObject(wrappedValue: IPABootstrap())
     }
 
     var body: some Scene {
         WindowGroup {
             IPARootView()
-                .environment(bootstrap)
+                .environmentObject(bootstrap)
                 .featureFlags(bootstrap.flags)
                 .ipaSettings(settings)
         }
@@ -33,10 +33,10 @@ struct IPAApp: App {
     }
 }
 
-@MainActor @Observable
-private final class IPABootstrap {
-    private(set) var database: IPADatabase?
-    private(set) var error: String?
+@MainActor
+private final class IPABootstrap: ObservableObject {
+    @Published private(set) var database: IPADatabase?
+    @Published private(set) var error: String?
     let flags: FeatureFlags
 
     init() {
@@ -55,17 +55,17 @@ private final class IPABootstrap {
 }
 
 private struct IPARootView: View {
-    @Environment(IPABootstrap.self) private var bootstrap
+    @EnvironmentObject private var bootstrap: IPABootstrap
     @State private var window: IPAWindow?
-    @State private var launch = LaunchProgress()
+    @StateObject private var launch = LaunchProgress()
     @State private var attempt = 0
 
     var body: some View {
         Group {
             if let window {
-                MainScreen().ipaWindow(window).environment(launch)
+                MainScreen().ipaWindow(window).environmentObject(launch)
             } else if let error = bootstrap.error {
-                ContentUnavailableView {
+                UnavailableState {
                     Label(
                         "Couldn't open IPA",
                         systemImage: "externaldrive.badge.exclamationmark")

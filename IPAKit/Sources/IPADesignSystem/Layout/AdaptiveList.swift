@@ -38,10 +38,8 @@ public struct AdaptiveList<SelectionValue: Hashable, Content: View>: View {
                 List(selection: selection) { content }
             }
         }
-        .onGeometryChange(for: Int.self) { [columnWidth] proxy in
-            GroupedMetrics.columns(in: proxy.size.width, columnWidth: columnWidth)
-        } action: {
-            columns = $0
+        .onSizeChange {
+            columns = GroupedMetrics.columns(in: $0.width, columnWidth: columnWidth)
         }
     }
 }

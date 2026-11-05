@@ -1,34 +1,25 @@
 import Foundation
 import IPADomain
-import SwiftData
 
 public struct IPADatabase: RepositoryProvider {
-    public let modelContainer: ModelContainer
-    let store: IPAStore
+    private let downloads: JSONDownloadRepository
 
-    public init(modelContainer: ModelContainer) {
-        self.modelContainer = modelContainer
-        store = IPAStore(modelContainer: modelContainer)
+    private init(storeURL: URL?) {
+        downloads = JSONDownloadRepository(fileURL: storeURL)
     }
 
     public static func open(inMemory: Bool = false, storeURL: URL? = nil) throws -> IPADatabase {
-        let schema = Schema(versionedSchema: IPASchemaV1.self)
-        let configuration =
-            if let storeURL {
-                ModelConfiguration(schema: schema, url: storeURL, cloudKitDatabase: .none)
-            } else {
-                ModelConfiguration(
-                    schema: schema, isStoredInMemoryOnly: inMemory, cloudKitDatabase: .none)
-            }
-        return IPADatabase(
-            modelContainer: try ModelContainer(
-                for: schema, migrationPlan: IPAMigrationPlan.self,
-                configurations: configuration))
+        if inMemory { return IPADatabase(storeURL: nil) }
+        return IPADatabase(storeURL: storeURL ?? Self.journalURL)
     }
 
-    public var storeURL: URL? { modelContainer.configurations.first?.url }
+    public var storeURL: URL? { Self.journalURL }
 
-    public var repositories: Repositories {
-        Repositories(downloads: SwiftDataDownloadRepository(store: store))
+    public var repositories: Repositories { Repositories(downloads: downloads) }
+
+    private static var journalURL: URL {
+        let folder = FileManager.default.urls(for: .applicationSupportDirectory, in: .userDomainMask)[0]
+        return folder.appendingPathComponent("IPA", isDirectory: true)
+            .appendingPathComponent("downloads.json")
     }
 }

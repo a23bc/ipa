@@ -1,15 +1,15 @@
+import Combine
 import Foundation
 import IPADomain
-import Observation
 import SwiftUI
 
-@MainActor @Observable
-public final class FeatureFlags {
-    public private(set) var remote: [String: RemoteFlag]
-    public private(set) var overrides: [String: Bool]
+@MainActor
+public final class FeatureFlags: ObservableObject {
+    @Published public private(set) var remote: [String: RemoteFlag]
+    @Published public private(set) var overrides: [String: Bool]
     public let bucket: Int
-    @ObservationIgnored private let defaults: UserDefaults
-    @ObservationIgnored private let source: (any RemoteFlagSource)?
+    private let defaults: UserDefaults
+    private let source: (any RemoteFlagSource)?
 
     public init(defaults: UserDefaults = .standard, source: (any RemoteFlagSource)? = nil) {
         self.defaults = defaults
@@ -57,12 +57,19 @@ public final class FeatureFlags {
     }
 }
 
+private struct FeatureFlagsKey: EnvironmentKey {
+    static var defaultValue: FeatureFlags? { nil }
+}
+
 extension EnvironmentValues {
-    @Entry public var featureFlags: FeatureFlags?
+    public var featureFlags: FeatureFlags? {
+        get { self[FeatureFlagsKey.self] }
+        set { self[FeatureFlagsKey.self] = newValue }
+    }
 }
 
 extension View {
     public func featureFlags(_ flags: FeatureFlags) -> some View {
-        environment(flags).environment(\.featureFlags, flags)
+        environmentObject(flags).environment(\.featureFlags, flags)
     }
 }

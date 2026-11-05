@@ -3,9 +3,9 @@ import IPADesignSystem
 import SwiftUI
 
 public struct LibraryScreen: View {
-    @Environment(LibraryModel.self) private var library
-    @Environment(DownloadCenter.self) private var downloads
-    @Environment(SessionModel.self) private var session
+    @EnvironmentObject private var library: LibraryModel
+    @EnvironmentObject private var downloads: DownloadCenter
+    @EnvironmentObject private var session: SessionModel
 
     public init() {}
 
@@ -18,7 +18,6 @@ public struct LibraryScreen: View {
             ForEach(library.groups) { LibraryAccountSection(group: $0) }
         }
         .libraryEmptyState(when: library.isShowingEmptyState)
-        .fontDesign(.rounded)
         .toolbar { ToolbarItem(placement: .leading) { AccountMenu() } }
         .searchable(text: $library.text, prompt: Text("Name or Bundle ID"))
         .confirmationDialog(
@@ -37,7 +36,7 @@ public struct LibraryScreen: View {
 }
 
 private struct LibraryHeroSection: View {
-    @Environment(LibraryModel.self) private var library
+    @EnvironmentObject private var library: LibraryModel
     @Environment(\.appTint) private var appTint
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
 
@@ -46,7 +45,7 @@ private struct LibraryHeroSection: View {
             Section {
             } header: {
                 VStack(spacing: .spaceS) {
-                    Chip(library.heroChip, color: appTint, shape: .capsule)
+                    Chip(library.heroChip, color: appTint, shape: Capsule())
                     Text(verbatim: library.heroTitle)
                         .font(.amountHero)
                         .foregroundStyle(Color.primary)
@@ -62,7 +61,7 @@ private struct LibraryHeroSection: View {
                 .frame(maxWidth: .infinity)
                 .padding(.vertical, .spaceL)
                 .accessibilityElement(children: .combine)
-                .animation(reduceMotion ? nil : .smooth, value: library.totalBytes)
+                .animation(reduceMotion ? nil : .smoothSpring, value: library.totalBytes)
             } footer: {
                 if library.isFilteredOut {
                     Text(verbatim: library.filteredOutText)
@@ -73,7 +72,7 @@ private struct LibraryHeroSection: View {
 }
 
 private struct InProgressSection: View {
-    @Environment(LibraryModel.self) private var library
+    @EnvironmentObject private var library: LibraryModel
 
     var body: some View {
         let tasks = library.tasks
@@ -90,7 +89,7 @@ private struct InProgressSection: View {
 }
 
 private struct LibraryAccountSection: View {
-    @Environment(LibraryModel.self) private var library
+    @EnvironmentObject private var library: LibraryModel
     let group: LibraryGroup
 
     var body: some View {
@@ -105,8 +104,8 @@ private struct LibraryAccountSection: View {
 }
 
 private struct LibraryEmptyState: View {
-    @Environment(LibraryModel.self) private var library
-    @Environment(IPANavigation.self) private var navigation
+    @EnvironmentObject private var library: LibraryModel
+    @EnvironmentObject private var navigation: IPANavigation
 
     var body: some View {
         EmptyStateView(

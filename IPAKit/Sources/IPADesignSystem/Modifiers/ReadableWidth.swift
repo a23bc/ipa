@@ -12,12 +12,9 @@ private struct ReadableWidth: ViewModifier {
 
     func body(content: Content) -> some View {
         content
-            .contentMargins(.horizontal, margin, for: .scrollContent)
-            .onGeometryChange(for: CGFloat?.self) { proxy in
-                let excess = (proxy.size.width - width) / 2
-                return excess > 20 ? excess : nil
-            } action: {
-                margin = $0
+            .onSizeChange {
+                let excess = ($0.width - width) / 2
+                margin = excess > 20 ? excess : nil
             }
     }
 }

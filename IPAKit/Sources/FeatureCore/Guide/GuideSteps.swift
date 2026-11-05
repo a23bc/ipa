@@ -40,7 +40,7 @@ public struct GuideSteps: View {
             }
         }
         .padding(.spaceL)
-        .background(.sheetCard, in: .rect(cornerRadius: .radiusL))
+        .background(.sheetCard, in: RoundedRectangle(cornerRadius: .radiusL))
         .multilineTextAlignment(.leading)
     }
 }
@@ -81,6 +81,5 @@ public struct GuideLink: View {
         .buttonStyle(.bordered)
         .buttonBorderShape(.capsule)
         .controlSize(.large)
-        .fontDesign(.rounded)
     }
 }
