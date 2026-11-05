@@ -38,6 +38,6 @@ enum ITunesRequest {
         components.host = "itunes.apple.com"
         components.path = path
         components.queryItems = items
-        return components.url ?? URL(filePath: "/")
+        return components.url ?? URL(fileURLWithPath: "/")
     }
 }
