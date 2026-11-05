@@ -6,12 +6,11 @@ public struct AccountMenu: View {
     @EnvironmentObject private var accounts: AccountsModel
     @Environment(\.open) private var open
     @Environment(\.navigationSection) private var section
-    @Environment(\.displayScale) private var displayScale
 
     public init() {}
 
     public var body: some View {
-        @Bindable var accounts = accounts
+        @Bind var accounts = accounts
         Menu {
             if !accounts.accounts.isEmpty {
                 Picker(selection: $accounts.selection) {
@@ -19,8 +18,7 @@ public struct AccountMenu: View {
                         Label {
                             Text(verbatim: account.displayName)
                         } icon: {
-                            AccountAvatar.image(for: account, size: .badgeS, scale: displayScale)
-                                .renderingMode(.original)
+                            AccountAvatar(account, size: .badgeS)
                         }
                         .tag(Optional(account.email))
                     }
@@ -35,7 +33,6 @@ public struct AccountMenu: View {
         } label: {
             AccountAvatar(accounts.active, size: .badgeM)
         }
-        .menuStyle(.button)
         .buttonStyle(.plain)
         .accessibilityLabel("Account")
     }

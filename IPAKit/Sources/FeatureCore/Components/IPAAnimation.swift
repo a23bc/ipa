@@ -2,6 +2,7 @@ import IPADesignSystem
 import IPAResource
 import Lottie
 import SwiftUI
+import UIKit
 
 public enum IPAAnimation: String, CaseIterable, Sendable {
     case computer
@@ -22,7 +23,6 @@ public enum IPAAnimation: String, CaseIterable, Sendable {
 public struct IPAAnimationView: View {
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
     @Environment(\.appTint) private var appTint
-    @Environment(\.self) private var environment
     private let animation: IPAAnimation
     private let loops: Bool
     private let isStill: Bool
@@ -72,10 +72,10 @@ public struct IPAAnimationView: View {
     }
 
     private func lottieColor(_ color: Color) -> LottieColor {
-        let resolved = color.resolve(in: environment)
+        var red: CGFloat = 0, green: CGFloat = 0, blue: CGFloat = 0, alpha: CGFloat = 0
+        UIColor(color).getRed(&red, green: &green, blue: &blue, alpha: &alpha)
         return LottieColor(
-            r: Double(resolved.red), g: Double(resolved.green), b: Double(resolved.blue),
-            a: Double(resolved.opacity))
+            r: Double(red), g: Double(green), b: Double(blue), a: Double(alpha))
     }
 }
 

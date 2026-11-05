@@ -1,10 +1,11 @@
 import Combine
 import SwiftUI
 
-/// Stand-in for the iOS 17 `@Bindable` wrapper. Works with `ObservableObject` models, whose
+/// iOS 15 stand-in for the iOS 17 `@Bindable` wrapper, named `Bind` because a same-named
+/// `Bindable` would be ambiguous with SwiftUI's. Works with `ObservableObject` models, whose
 /// `@Published` properties already publish, so bindings created here still refresh the view.
 @propertyWrapper
-public struct Bindable<Object: ObservableObject> {
+public struct Bind<Object: ObservableObject> {
     private let object: Object
 
     public init(_ object: Object) {
@@ -13,10 +14,10 @@ public struct Bindable<Object: ObservableObject> {
 
     public var wrappedValue: Object { object }
 
-    public var projectedValue: BindableBindings<Object> { BindableBindings(object: object) }
+    public var projectedValue: BindBindings<Object> { BindBindings(object: object) }
 }
 
-public struct BindableBindings<Object: ObservableObject> {
+public struct BindBindings<Object: ObservableObject> {
     fileprivate let object: Object
 
     public subscript<Value>(

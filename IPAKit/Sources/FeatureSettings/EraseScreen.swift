@@ -7,7 +7,7 @@ struct EraseScreen: View {
     @Environment(\.appTint) private var appTint
 
     var body: some View {
-        @Bindable var store = store
+        @Bind var store = store
         GuideSheet(
             index: store.eraseStep.rawValue, count: StoreSettingsModel.EraseStep.allCases.count,
             isWorking: store.isWorking, primary: primary, secondary: secondary

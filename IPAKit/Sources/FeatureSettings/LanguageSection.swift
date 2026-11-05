@@ -5,7 +5,7 @@ struct LanguageSection: View {
     @EnvironmentObject private var settings: SettingsModel
 
     var body: some View {
-        @Bindable var settings = settings
+        @Bind var settings = settings
         Section {
             Picker("Language", selection: $settings.language) {
                 ForEach(AppLanguage.allCases) { Text($0.nativeName).tag($0) }

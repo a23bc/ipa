@@ -15,19 +15,15 @@ public struct MainScreen: View {
 
     @ViewBuilder
     public var body: some View {
-        @Bindable var navigation = navigation
+        @Bind var navigation = navigation
         TabView(selection: $navigation.selectedSection) {
             ForEach(AppSection.allCases) { section in
-                Tab(
-                    section.title, systemImage: section.systemImage, value: section,
-                    role: section.role
-                ) {
-                    SectionStack(section: section)
-                }
+                SectionStack(section: section)
+                    .tabItem { Label(section.title, systemImage: section.systemImage) }
+                    .tag(section)
             }
         }
         .id(locale.identifier)
-        .tabViewStyle(.sidebarAdaptable)
         .overlay {
             if !launch.isDismissed {
                 SplashScreen(progress: launch.fraction, status: launch.status)

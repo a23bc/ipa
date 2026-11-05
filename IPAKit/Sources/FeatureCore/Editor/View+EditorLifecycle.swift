@@ -18,7 +18,7 @@ private struct EditorLifecycle: ViewModifier {
     let load: @MainActor () async -> Void
 
     func body(content: Content) -> some View {
-        @Bindable var status = status
+        @Bind var status = status
         content
             .task(id: trigger) { await load() }
             .dismissKeyboardOnScroll()

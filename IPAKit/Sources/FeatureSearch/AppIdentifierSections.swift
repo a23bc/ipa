@@ -61,7 +61,7 @@ struct AppVersionIDSection: View {
     @EnvironmentObject private var model: AppModel
 
     var body: some View {
-        @Bindable var model = model
+        @Bind var model = model
         if model.canDownload {
             Section {
                 TextField("Version ID, like 875214761", text: $model.versionIDText)

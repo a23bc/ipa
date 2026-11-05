@@ -7,7 +7,7 @@ struct AccentColorSection: View {
     @Environment(\.appTint) private var appTint
 
     var body: some View {
-        @Bindable var settings = settings
+        @Bind var settings = settings
         Section {
             RetroColorPicker(hex: $settings.tint)
         } header: {

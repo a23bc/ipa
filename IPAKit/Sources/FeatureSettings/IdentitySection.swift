@@ -6,7 +6,7 @@ struct IdentitySection: View {
     @EnvironmentObject private var store: StoreSettingsModel
 
     var body: some View {
-        @Bindable var store = store
+        @Bind var store = store
         Section {
             Button(role: .destructive) {
                 store.startIdentityChange()
@@ -57,7 +57,7 @@ private struct IdentityChangeScreen: View {
     @Environment(\.dismiss) private var dismiss
 
     var body: some View {
-        @Bindable var store = store
+        @Bind var store = store
         GuideSheet(
             index: 0, count: 1,
             primary: GuideAction("Generate New Identity") { store.regenerateIdentity() },

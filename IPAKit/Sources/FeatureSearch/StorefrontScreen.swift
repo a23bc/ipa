@@ -20,7 +20,7 @@ private struct StorefrontList: View {
     @EnvironmentObject private var model: StorefrontModel
 
     var body: some View {
-        @Bindable var model = model
+        @Bind var model = model
         List {
             AccountStoreSection()
             StorefrontsSection()

@@ -40,7 +40,7 @@ public struct MonthPicker: View {
                     calendar: calendar, tint: appTint, move: move, jumpToToday: jumpToToday)
                 MonthGrid(calendar: calendar, tint: appTint) { selection = $0 }
                     .id(year)
-                    .transition(reduceMotion ? .opacity : .push(from: edge))
+                    .transition(reduceMotion ? .opacity : .move(edge: edge))
                     .gesture(swipe)
             }
             .clipped()

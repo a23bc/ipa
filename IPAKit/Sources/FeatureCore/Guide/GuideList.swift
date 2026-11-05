@@ -26,27 +26,6 @@ public struct GuideFeature: View {
     }
 }
 
-public struct GuideFeatureList<Content: View>: View {
-    private let content: Content
-
-    public init(@ViewBuilder content: () -> Content) {
-        self.content = content()
-    }
-
-    public var body: some View {
-        VStack(spacing: 0) {
-            Group(subviews: content) { subviews in
-                ForEach(subviews.indices, id: \.self) { index in
-                    subviews[index]
-                    if index < subviews.count - 1 { Divider().padding(.leading, .spaceL) }
-                }
-            }
-        }
-        .multilineTextAlignment(.leading)
-        .background(.sheetCard, in: RoundedRectangle(cornerRadius: .radiusM))
-    }
-}
-
 public struct GuideValue: View {
     private let label: String
     private let value: String

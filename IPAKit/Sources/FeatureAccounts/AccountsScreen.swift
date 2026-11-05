@@ -12,7 +12,7 @@ public struct AccountsScreen: View {
     public init() {}
 
     public var body: some View {
-        @Bindable var accounts = accounts
+        @Bind var accounts = accounts
         AdaptiveList {
             ActiveAccountSection()
             OtherAccountsSection()

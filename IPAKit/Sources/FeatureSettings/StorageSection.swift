@@ -6,7 +6,7 @@ struct StorageSection: View {
     @EnvironmentObject private var store: StoreSettingsModel
 
     var body: some View {
-        @Bindable var store = store
+        @Bind var store = store
         Section {
             Button(role: .destructive) {
                 store.startErase()

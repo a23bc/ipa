@@ -10,8 +10,8 @@ public struct LibraryScreen: View {
     public init() {}
 
     public var body: some View {
-        @Bindable var library = library
-        @Bindable var downloads = downloads
+        @Bind var library = library
+        @Bind var downloads = downloads
         AdaptiveList {
             LibraryHeroSection()
             InProgressSection()

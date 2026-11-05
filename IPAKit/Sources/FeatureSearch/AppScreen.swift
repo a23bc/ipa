@@ -9,7 +9,7 @@ public struct AppScreen: View {
     public init() {}
 
     public var body: some View {
-        @Bindable var model = model
+        @Bind var model = model
         AdaptiveList {
             if model.app != nil || model.isShowingPlaceholder {
                 AppHeroSection()

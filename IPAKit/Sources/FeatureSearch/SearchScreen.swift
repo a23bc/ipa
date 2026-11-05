@@ -10,7 +10,7 @@ public struct SearchScreen: View {
     public init() {}
 
     public var body: some View {
-        @Bindable var search = search
+        @Bind var search = search
         AdaptiveList {
             SearchResultsSection()
         }

@@ -6,7 +6,7 @@ public enum AppSection: String, CaseIterable, Identifiable, Sendable {
 
     public var id: String { rawValue }
 
-    public static var barSections: [AppSection] { allCases.filter { $0.role == nil } }
+    public static var barSections: [AppSection] { allCases.filter { $0 != .search } }
 
     public static var prominent: AppSection { .search }
 
@@ -25,13 +25,6 @@ public enum AppSection: String, CaseIterable, Identifiable, Sendable {
         case .downloads: "arrow.down.circle"
         case .accounts: "person.crop.circle"
         case .settings: "gearshape"
-        }
-    }
-
-    public var role: TabRole? {
-        switch self {
-        case .search: .search
-        case .downloads, .accounts, .settings: nil
         }
     }
 }

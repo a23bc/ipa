@@ -28,7 +28,7 @@ public struct AppArtwork: View {
         .clipShape(RoundedRectangle(cornerRadius: size * 0.2237, style: .continuous))
         .overlay {
             RoundedRectangle(cornerRadius: size * 0.2237, style: .continuous)
-                .strokeBorder(.separator, lineWidth: 1)
+                .strokeBorder(Color(uiColor: .separator), lineWidth: 1)
         }
         .accessibilityHidden(true)
     }

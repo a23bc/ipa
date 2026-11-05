@@ -27,7 +27,7 @@ struct ThemePreview: View {
         .clipShape(RoundedRectangle(cornerRadius: .radiusM, style: .continuous))
         .overlay {
             RoundedRectangle(cornerRadius: .radiusM, style: .continuous)
-                .stroke(.separator, lineWidth: 1)
+                .stroke(Color(uiColor: .separator), lineWidth: 1)
         }
         .dynamicTypeSize(.large)
         .allowsHitTesting(false)

@@ -8,7 +8,7 @@ public struct SignInScreen: View {
     public init() {}
 
     public var body: some View {
-        @Bindable var model = model
+        @Bind var model = model
         Form {
             SignInEngineSection()
             switch model.step {
@@ -47,7 +47,7 @@ private struct SignInCredentialsSection: View {
     @FocusState private var focus: Field?
 
     var body: some View {
-        @Bindable var model = model
+        @Bind var model = model
         Section {
             TextField("Email", text: $model.email, prompt: Text(verbatim: "name@icloud.com"))
                 .textContentType(.username)
@@ -82,7 +82,7 @@ private struct SignInCodeSection: View {
     @FocusState private var isFocused: Bool
 
     var body: some View {
-        @Bindable var model = model
+        @Bind var model = model
         Section {
             TextField("Code", text: $model.code, prompt: Text(verbatim: "000000"))
                 .textContentType(.oneTimeCode)
