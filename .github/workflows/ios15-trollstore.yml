@@ -19,12 +19,14 @@ jobs:
 
       - name: Resolve packages
         run: |
+          mkdir -p build
           xcodebuild -workspace IPA.xcworkspace -scheme Production \
             -resolvePackageDependencies -destination 'generic/platform=iOS'
 
       - name: Archive unsigned
         run: |
           set -eo pipefail
+          mkdir -p build
           xcodebuild -workspace IPA.xcworkspace -scheme Production -configuration Release \
             -destination 'generic/platform=iOS' -archivePath build/IPA.xcarchive \
             -derivedDataPath build/Derived -skipPackageUpdates \
@@ -37,15 +39,18 @@ jobs:
       - name: Ad-hoc sign and package IPA
         run: |
           set -eo pipefail
-          app=$(find build/IPA.xcarchive/Products/Applications -maxdepth 1 -name '*.app')
+          app=$(find build/IPA.xcarchive/Products/Applications -maxdepth 1 -name '*.app' -print -quit)
           echo "app bundle: $app"
-          find "$app/Frameworks" -maxdepth 1 \( -name '*.framework' -o -name '*.dylib' \) -print0 \
-            | xargs -0 -r -I{} codesign --force --sign - --timestamp=none {}
-          find "$app/PlugIns" -maxdepth 1 -name '*.appex' -print0 2>/dev/null \
-            | xargs -0 -r -I{} codesign --force --sign - --timestamp=none {} || true
+          # BSD xargs has no -r, so sign through an explicit glob guard instead.
+          for item in "$app"/Frameworks/*.framework "$app"/Frameworks/*.dylib \
+                      "$app"/PlugIns/*.appex; do
+            [ -e "$item" ] || continue
+            codesign --force --sign - --timestamp=none "$item"
+          done
           codesign --force --sign - --timestamp=none "$app"
           codesign -dvvv "$app" 2>&1 | tee build/codesign.txt
-          mkdir -p Payload && cp -R "$app" Payload/
+          mkdir -p Payload
+          cp -R "$app" Payload/
           zip -qry IPA-ios15.ipa Payload
           ls -l IPA-ios15.ipa
           shasum -a 256 IPA-ios15.ipa
@@ -53,10 +58,13 @@ jobs:
       - name: Verify payload signature
         run: |
           set -eo pipefail
-          exe=$(find Payload -maxdepth 2 -type f -perm +111 | head -1)
+          app=Payload/IPA.app
+          exe="$app/$(plutil -extract CFBundleExecutable raw "$app/Info.plist")"
           echo "executable: $exe"
+          plutil -extract MinimumOSVersion raw "$app/Info.plist"
+          plutil -extract CFBundleIdentifier raw "$app/Info.plist"
           otool -l "$exe" | grep -A4 LC_CODE_SIGNATURE | head -12
-          plutil -extract MinimumOSVersion raw "Payload/IPA.app/Info.plist"
+          codesign -dvvv "$exe" 2>&1 | grep -E "CodeDirectory|flags|Identifier" | head -5
 
       - uses: actions/upload-artifact@v4
         if: always()

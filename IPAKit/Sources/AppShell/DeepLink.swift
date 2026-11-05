@@ -12,7 +12,7 @@ enum DeepLink: Equatable {
             return
         }
         let path = url.pathComponents.dropFirst().first
-        switch url.host() {
+        switch url.host {
         case "search":
             let query = URLComponents(url: url, resolvingAgainstBaseURL: false)?
                 .queryItems?.first { $0.name == "q" }?.value
