@@ -4,7 +4,7 @@ extension View {
     public func surface(
         tint: Color? = nil, in shape: some InsettableShape, interactive: Bool = false
     ) -> some View {
-        modifier(GlassSurface(tint: tint, shape: shape, interactive: interactive))
+        modifier(FlatSurface(tint: tint, shape: shape))
     }
 
     public func clearSurface(in shape: some InsettableShape) -> some View {
@@ -16,30 +16,20 @@ extension View {
     }
 }
 
+// iOS 26 glass has no iOS 15 counterpart, so surfaces become translucent fills.
 private struct ClearSurface<S: InsettableShape>: ViewModifier {
     let shape: S
 
     func body(content: Content) -> some View {
-        #if os(visionOS)
-            content.glassBackgroundEffect(in: shape)
-        #else
-            content.glassEffect(.clear, in: shape)
-        #endif
+        content.background(.ultraThinMaterial, in: shape)
     }
 }
 
-private struct GlassSurface<S: InsettableShape>: ViewModifier {
-    @Environment(\.isEnabled) private var isEnabled
+private struct FlatSurface<S: InsettableShape>: ViewModifier {
     let tint: Color?
     let shape: S
-    let interactive: Bool
 
     func body(content: Content) -> some View {
-        #if os(visionOS)
-            content.background(tint ?? .clear, in: shape).glassBackgroundEffect(in: shape)
-        #else
-            content.glassEffect(
-                .regular.accentColor(tint).interactive(interactive && isEnabled), in: shape)
-        #endif
+        content.background(tint ?? Color.primary.opacity(0.06), in: shape)
     }
 }

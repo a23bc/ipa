@@ -41,7 +41,6 @@ private struct EngineHero: View {
             IPAAnimationView(.jit).frame(maxWidth: 260)
             VStack(spacing: .spaceS) {
                 Chip(store.engineTitle, color: store.engineColor, shape: Capsule())
-                    .contentTransition(.opacity)
                 Text(verbatim: store.engineCaption)
                     .font(.subheadline)
                     .foregroundStyle(.secondary)

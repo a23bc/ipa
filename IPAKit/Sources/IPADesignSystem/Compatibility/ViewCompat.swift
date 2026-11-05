@@ -1,7 +1,7 @@
 import SwiftUI
 
 private struct SizeKey: PreferenceKey {
-    static var defaultValue: CGSize = .zero
+    static var defaultValue: CGSize { .zero }
     static func reduce(value: inout CGSize, nextValue: () -> CGSize) { value = nextValue() }
 }
 
@@ -53,6 +53,15 @@ extension View {
         of value: Value, initial: Bool = false, _ action: @escaping (Value, Value) -> Void
     ) -> some View {
         modifier(ChangeObserver(value: value, initial: initial, onNext: action))
+    }
+}
+
+extension Color {
+    /// iOS 15 stand-in for `Color.gradient`, which requires iOS 16.
+    public var compatibleGradient: LinearGradient {
+        LinearGradient(
+            gradient: Gradient(colors: [self, opacity(0.75)]),
+            startPoint: .top, endPoint: .bottom)
     }
 }
 

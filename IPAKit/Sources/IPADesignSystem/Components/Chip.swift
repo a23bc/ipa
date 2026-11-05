@@ -37,9 +37,9 @@ public struct Chip: View {
             .foregroundStyle(color)
             .lineLimit(1)
             .padding(.horizontal, .spaceM)
-            .padding(.vertical, shape == Capsule() ? .spaceS : .space2XS)
+            .padding(.vertical, shape == .capsule ? .spaceS : .space2XS)
         switch shape {
-        case Capsule(): label.background(color.opacity(.opacityTint), in: Capsule())
+        case .capsule: label.background(color.opacity(.opacityTint), in: Capsule())
         case .tag: label.background(color.opacity(.opacityTint), in: RoundedRectangle(cornerRadius: .radiusS))
         }
     }

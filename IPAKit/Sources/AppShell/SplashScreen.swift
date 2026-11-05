@@ -69,7 +69,6 @@ public struct SplashScreen<Footer: View>: View {
                     Text(status)
                         .font(.footnote)
                         .foregroundStyle(.secondary)
-                        .contentTransition(.opacity)
                 }
             }
             .animation(.easeOut(duration: 0.25), value: progress)

@@ -40,7 +40,6 @@ struct DownloadTaskRow: View {
             Text(verbatim: library.statusText(for: task))
                 .font(.footnote)
                 .foregroundStyle(task.failure == nil ? Color.secondary : Color.negative)
-                .contentTransition(.numericText())
             if task.failure != nil {
                 HStack(spacing: .spaceL) {
                     Button("Retry", systemImage: "arrow.clockwise") { library.retry(task) }

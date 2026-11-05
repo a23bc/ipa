@@ -40,7 +40,6 @@ private struct IdentityHero: View {
                 .font(.amountTitle)
                 .monospaced()
                 .foregroundStyle(Color.primary)
-                .contentTransition(.numericText())
                 .amountLine()
             Text("What Apple sees as this device").font(.subheadline).foregroundStyle(.secondary)
         }

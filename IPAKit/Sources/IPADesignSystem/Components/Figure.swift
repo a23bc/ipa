@@ -79,7 +79,6 @@ public struct FigureValue: View {
         Text(value)
             .font(.amountHero)
             .foregroundStyle(color)
-            .contentTransition(.numericText(value: numeric))
             .amountLine()
     }
 }

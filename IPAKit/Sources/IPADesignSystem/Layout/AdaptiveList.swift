@@ -1,65 +1,25 @@
 import SwiftUI
 
+/// iOS 15 has no way to enumerate a view's sections, which is what the multi-column grouped
+/// layout needed; a single grouped `List` is what those columns collapsed to on a phone anyway.
 public struct AdaptiveList<SelectionValue: Hashable, Content: View>: View {
     private let selection: Binding<Set<SelectionValue>>?
-    private let columnWidth: CGFloat
     private let content: Content
-    @State private var columns = 1
 
     public init(
-        selection: Binding<Set<SelectionValue>>?, columnWidth: CGFloat = 320,
-        @ViewBuilder content: () -> Content
+        selection: Binding<Set<SelectionValue>>?, @ViewBuilder content: () -> Content
     ) {
         self.selection = selection
-        self.columnWidth = columnWidth
         self.content = content()
     }
 
     public var body: some View {
-        Group {
-            if columns > 1 {
-                ScrollView {
-                    Group(sections: content) { sections in
-                        HStack(alignment: .top, spacing: GroupedMetrics.columnSpacing) {
-                            ForEach(0..<columns, id: \.self) { column in
-                                LazyVStack(spacing: GroupedMetrics.sectionSpacing) {
-                                    ForEach(sections.column(column, of: columns)) {
-                                        GroupedSection(section: $0)
-                                    }
-                                }
-                            }
-                        }
-                        .padding(GroupedMetrics.margin)
-                    }
-                }
-                .background(.groupedBackground)
-                .environment(\.isGroupedColumn, true)
-            } else {
-                List(selection: selection) { content }
-            }
-        }
-        .onSizeChange {
-            columns = GroupedMetrics.columns(in: $0.width, columnWidth: columnWidth)
-        }
+        List(selection: selection) { content }
     }
 }
 
 extension AdaptiveList where SelectionValue == Never {
-    public init(columnWidth: CGFloat = 320, @ViewBuilder content: () -> Content) {
-        self.init(selection: nil, columnWidth: columnWidth, content: content)
-    }
-}
-
-extension SectionCollection {
-    fileprivate func column(_ column: Int, of count: Int) -> [SectionConfiguration] {
-        enumerated().filter { $0.offset % count == column }.map(\.element)
-    }
-}
-
-extension GroupedMetrics {
-    fileprivate static func columns(in width: CGFloat, columnWidth: CGFloat) -> Int {
-        let available = width - margin * 2
-        let fit = (available + columnSpacing) / (columnWidth + columnSpacing)
-        return max(1, Int(fit))
+    public init(@ViewBuilder content: () -> Content) {
+        self.init(selection: nil, content: content)
     }
 }

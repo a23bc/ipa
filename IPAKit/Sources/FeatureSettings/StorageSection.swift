@@ -39,7 +39,6 @@ private struct StorageHero: View {
             Text(verbatim: store.usedSpaceText)
                 .font(.amountHero)
                 .foregroundStyle(Color.primary)
-                .contentTransition(.numericText(value: Double(store.usedBytes)))
                 .amountLine()
             Text(verbatim: store.packagesCaption).font(.subheadline).foregroundStyle(.secondary)
         }

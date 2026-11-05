@@ -18,7 +18,6 @@ struct AccentColorSection: View {
                     .font(.subheadline.weight(.semibold))
                     .foregroundStyle(appTint)
                     .lineLimit(1)
-                    .contentTransition(.opacity)
             }
             .textCase(nil)
         } footer: {

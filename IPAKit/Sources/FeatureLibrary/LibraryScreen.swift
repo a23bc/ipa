@@ -49,12 +49,10 @@ private struct LibraryHeroSection: View {
                     Text(verbatim: library.heroTitle)
                         .font(.amountHero)
                         .foregroundStyle(Color.primary)
-                        .contentTransition(.numericText(value: Double(library.packageCount)))
                         .amountLine()
                     Text(verbatim: library.heroCaption)
                         .font(.subheadline)
                         .foregroundStyle(.secondary)
-                        .contentTransition(.numericText(value: Double(library.totalBytes)))
                 }
                 .textCase(nil)
                 .multilineTextAlignment(.center)

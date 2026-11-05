@@ -24,7 +24,7 @@ public struct Avatar: View {
                 if case .image = content {
                     Circle().fill(Color.subtleFill)
                 } else {
-                    Circle().fill(color.gradient)
+                    Circle().fill(color.compatibleGradient)
                 }
             }
             .clipShape(Circle())

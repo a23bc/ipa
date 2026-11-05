@@ -48,9 +48,10 @@ private struct AppChips: View {
     @Environment(\.appTint) private var appTint
 
     var body: some View {
-        ViewThatFits {
-            HStack(spacing: .spaceXS) { chips }
-            FlowLayout(spacing: .spaceXS, alignment: .center) { chips }
+        LazyVGrid(
+            columns: [GridItem(.adaptive(minimum: 96, spacing: .spaceXS))], spacing: .spaceXS
+        ) {
+            chips
         }
         .accessibilityElement(children: .combine)
     }
@@ -105,7 +106,6 @@ private struct AppProgressRow: View {
                     .font(.footnote)
                     .foregroundStyle(.secondary)
                     .monospacedDigit()
-                    .contentTransition(.numericText())
             }
             .lineLimit(1)
             ProgressView(value: model.progressFraction)

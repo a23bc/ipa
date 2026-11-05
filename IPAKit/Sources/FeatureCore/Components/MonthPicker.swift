@@ -83,11 +83,9 @@ private struct MonthSummaryRow: View {
                     Text(calendar.selectionTitle)
                         .font(.rowTitle)
                         .foregroundStyle(isExpanded ? tint : Color.primary)
-                        .contentTransition(.interpolate)
                     Text(calendar.relativeTitle)
                         .font(.footnote)
                         .foregroundStyle(.secondary)
-                        .contentTransition(.interpolate)
                 }
                 Spacer(minLength: .spaceS)
                 Image(systemName: "chevron.forward")
@@ -113,7 +111,6 @@ private struct MonthYearBar: View {
         HStack(spacing: .space2XS) {
             Text(calendar.yearTitle)
                 .font(.headline)
-                .contentTransition(.numericText(value: Double(calendar.year)))
                 .accessibilityAdjustableAction { direction in
                     switch direction {
                     case .increment: move(1)

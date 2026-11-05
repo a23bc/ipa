@@ -24,7 +24,7 @@ public struct SymbolBadge: View {
             .frame(width: size, height: size)
             .background {
                 if style == .filled {
-                    Circle().fill(color.gradient)
+                    Circle().fill(color.compatibleGradient)
                 } else {
                     Circle().fill(color.opacity(.opacityTint))
                 }
