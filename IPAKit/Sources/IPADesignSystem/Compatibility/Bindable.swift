@@ -17,6 +17,7 @@ public struct Bind<Object: ObservableObject> {
     public var projectedValue: BindBindings<Object> { BindBindings(object: object) }
 }
 
+@dynamicMemberLookup
 public struct BindBindings<Object: ObservableObject> {
     fileprivate let object: Object
 
