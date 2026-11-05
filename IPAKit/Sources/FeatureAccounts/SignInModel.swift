@@ -39,8 +39,15 @@ public final class SignInModel: ObservableObject {
     public var availability: EngineAvailability { session.availability }
 
     public var isEmailValid: Bool {
-        email.trimmingCharacters(in: .whitespacesAndNewlines)
-            .wholeMatch(of: /[^@\s]+@[^@\s]+\.[^@\s]+/) != nil
+        let trimmed = email.trimmingCharacters(in: .whitespacesAndNewlines)
+        guard let pattern = Self.emailPattern else { return false }
+        return pattern.firstMatch(
+            in: trimmed, range: NSRange(location: 0, length: trimmed.utf16.count)) != nil
+    }
+
+    /// Regex literals need iOS 16, so the same pattern runs through NSRegularExpression.
+    private static var emailPattern: NSRegularExpression? {
+        try? NSRegularExpression(pattern: "[^@\\s]+@[^@\\s]+\\.[^@\\s]+")
     }
 
     public var isCodeComplete: Bool { code.count == Self.codeLength }
