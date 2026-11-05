@@ -4,7 +4,7 @@ import PackageDescription
 let package = Package(
     name: "IPAKit",
     defaultLocalization: "en",
-    platforms: [.iOS("27.0"), .macOS("27.0"), .visionOS("27.0")],
+    platforms: [.iOS("15.0")],
     products: [
         .library(name: "IPAWidgetKit", targets: ["IPADomain", "IPADesignSystem"]),
         .library(

@@ -1,0 +1,69 @@
+name: ios15-trollstore
+
+on:
+  push:
+    branches: [port/ios15]
+  workflow_dispatch:
+
+jobs:
+  ipa:
+    runs-on: macos-26
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Toolchain
+        run: |
+          sw_vers
+          xcodebuild -version
+          xcrun --sdk iphoneos --show-sdk-version
+
+      - name: Resolve packages
+        run: |
+          xcodebuild -workspace IPA.xcworkspace -scheme Production \
+            -resolvePackageDependencies -destination 'generic/platform=iOS'
+
+      - name: Archive unsigned
+        run: |
+          set -eo pipefail
+          xcodebuild -workspace IPA.xcworkspace -scheme Production -configuration Release \
+            -destination 'generic/platform=iOS' -archivePath build/IPA.xcarchive \
+            -derivedDataPath build/Derived -skipPackageUpdates \
+            CODE_SIGNING_ALLOWED=NO CODE_SIGNING_REQUIRED=NO CODE_SIGN_IDENTITY= \
+            CODE_SIGN_STYLE=Manual DEVELOPMENT_TEAM= \
+            COMPILER_INDEX_STORE_ENABLE=NO ARCHS=arm64 ONLY_ACTIVE_ARCH=NO \
+            IPHONEOS_DEPLOYMENT_TARGET=15.0 \
+            archive 2>&1 | tee build/archive.log
+
+      - name: Ad-hoc sign and package IPA
+        run: |
+          set -eo pipefail
+          app=$(find build/IPA.xcarchive/Products/Applications -maxdepth 1 -name '*.app')
+          echo "app bundle: $app"
+          find "$app/Frameworks" -maxdepth 1 \( -name '*.framework' -o -name '*.dylib' \) -print0 \
+            | xargs -0 -r -I{} codesign --force --sign - --timestamp=none {}
+          find "$app/PlugIns" -maxdepth 1 -name '*.appex' -print0 2>/dev/null \
+            | xargs -0 -r -I{} codesign --force --sign - --timestamp=none {} || true
+          codesign --force --sign - --timestamp=none "$app"
+          codesign -dvvv "$app" 2>&1 | tee build/codesign.txt
+          mkdir -p Payload && cp -R "$app" Payload/
+          zip -qry IPA-ios15.ipa Payload
+          ls -l IPA-ios15.ipa
+          shasum -a 256 IPA-ios15.ipa
+
+      - name: Verify payload signature
+        run: |
+          set -eo pipefail
+          exe=$(find Payload -maxdepth 2 -type f -perm +111 | head -1)
+          echo "executable: $exe"
+          otool -l "$exe" | grep -A4 LC_CODE_SIGNATURE | head -12
+          plutil -extract MinimumOSVersion raw "Payload/IPA.app/Info.plist"
+
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: IPA-ios15
+          path: |
+            IPA-ios15.ipa
+            build/codesign.txt
+            build/archive.log
+          if-no-files-found: warn
