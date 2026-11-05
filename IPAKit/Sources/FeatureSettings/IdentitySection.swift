@@ -35,7 +35,7 @@ private struct IdentityHero: View {
 
     var body: some View {
         VStack(spacing: .spaceS) {
-            Chip(store.identityChip, color: appTint, shape: Capsule())
+            Chip(store.identityChip, color: appTint, shape: .capsule)
             Text(verbatim: store.identityText)
                 .font(.amountTitle)
                 .monospaced()

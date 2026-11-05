@@ -58,7 +58,7 @@ private struct AppChips: View {
 
     private var chips: some View {
         ForEach(model.chips) {
-            Chip($0.text, color: $0.color(tint: appTint), shape: Capsule()).fixedSize()
+            Chip($0.text, color: $0.color(tint: appTint), shape: .capsule).fixedSize()
         }
     }
 }

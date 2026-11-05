@@ -45,7 +45,7 @@ private struct LibraryHeroSection: View {
             Section {
             } header: {
                 VStack(spacing: .spaceS) {
-                    Chip(library.heroChip, color: appTint, shape: Capsule())
+                    Chip(library.heroChip, color: appTint, shape: .capsule)
                     Text(verbatim: library.heroTitle)
                         .font(.amountHero)
                         .foregroundStyle(Color.primary)

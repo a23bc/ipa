@@ -35,7 +35,7 @@ private struct StorageHero: View {
 
     var body: some View {
         VStack(spacing: .spaceS) {
-            Chip(store.storageChip, color: appTint, shape: Capsule())
+            Chip(store.storageChip, color: appTint, shape: .capsule)
             Text(verbatim: store.usedSpaceText)
                 .font(.amountHero)
                 .foregroundStyle(Color.primary)

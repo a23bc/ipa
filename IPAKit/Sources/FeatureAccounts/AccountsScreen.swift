@@ -71,7 +71,7 @@ private struct ActiveAccountSection: View {
                         .foregroundStyle(.secondary)
                         .lineLimit(1)
                         .minimumScaleFactor(0.8)
-                    Chip(active.storefront.title, color: appTint, shape: Capsule())
+                    Chip(active.storefront.title, color: appTint, shape: .capsule)
                 }
                 .id(active.email)
                 .transition(.opacity)
