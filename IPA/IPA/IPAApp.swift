@@ -65,15 +65,20 @@ private struct IPARootView: View {
             if let window {
                 MainScreen().ipaWindow(window).environmentObject(launch)
             } else if let error = bootstrap.error {
-                UnavailableState {
+                VStack(spacing: 12) {
                     Label(
                         "Couldn't open IPA",
                         systemImage: "externaldrive.badge.exclamationmark")
-                } description: {
-                    Text(error)
-                } actions: {
+                        .font(.title3.weight(.semibold))
+                        .foregroundStyle(Color.secondary)
+                    Text(verbatim: error)
+                        .font(.footnote)
+                        .foregroundStyle(Color.secondary)
+                        .multilineTextAlignment(.center)
                     Button("Try Again") { attempt += 1 }
                 }
+                .padding()
+                .frame(maxWidth: .infinity, maxHeight: .infinity)
             } else {
                 SplashScreen(progress: launch.fraction, status: launch.status)
             }
