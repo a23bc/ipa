@@ -50,7 +50,8 @@ public struct MainScreen: View {
         )
         .change(of: session.generation, initial: true) { launch.finish(.content) }
         .task(id: launch.isComplete) {
-            try? await Task.sleep(for: launch.isComplete ? .milliseconds(600) : .seconds(8))
+            try? await Task.sleep(
+                nanoseconds: launch.isComplete ? 600_000_000 : 8_000_000_000)
             launch.dismiss()
         }
         .change(of: navigation.selectedSection) { navigation.closeInspectorOutsideSelection() }

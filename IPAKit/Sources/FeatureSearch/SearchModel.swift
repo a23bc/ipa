@@ -24,17 +24,17 @@ public final class SearchModel: ObservableObject {
     private let session: SessionModel
     private let preferences: StorePreferences
     private let accounts: AccountsModel
-    private let debounce: Duration
+    private let debounceMilliseconds: Double
     private var request = 0
 
     public init(
         session: SessionModel, preferences: StorePreferences, accounts: AccountsModel,
-        debounce: Duration = .milliseconds(350)
+        debounceMilliseconds: Double = 350
     ) {
         self.session = session
         self.preferences = preferences
         self.accounts = accounts
-        self.debounce = debounce
+        self.debounceMilliseconds = debounceMilliseconds
     }
 
     public var storefront: Storefront { preferences.storefront(for: accounts.active) }
@@ -63,7 +63,7 @@ public final class SearchModel: ObservableObject {
         isSearching = true
         defer { if current == request { isSearching = false } }
         do {
-            try await Task.sleep(for: debounce)
+            try await Task.sleep(nanoseconds: UInt64(debounceMilliseconds * 1_000_000))
             let found = try await fetch(query, key: key)
             try Task.checkCancellation()
             guard current == request else { return }

@@ -6,16 +6,18 @@ public struct SimulatedStoreEngine: StoreEngine {
     public static let wrongPassword = "wrong"
     private let vault: any AccountVault
     private let availabilityValue: EngineAvailability
-    private let step: Duration
+    private let stepMilliseconds: Double
 
     public init(
         vault: any AccountVault, availability: EngineAvailability = .ready,
-        step: Duration = .milliseconds(120)
+        stepMilliseconds: Double = 120
     ) {
         self.vault = vault
         availabilityValue = availability
-        self.step = step
+        self.stepMilliseconds = stepMilliseconds
     }
+
+    private var stepNanoseconds: UInt64 { UInt64(max(stepMilliseconds, 0) * 1_000_000) }
 
     public func availability() async -> EngineAvailability { availabilityValue }
 
@@ -67,9 +69,9 @@ public struct SimulatedStoreEngine: StoreEngine {
         guard request.app.isFree else { throw IPAError.paidApp }
         let total = request.app.sizeBytes ?? 50 * 1_048_576
         progress(DownloadProgress(phase: .preparing))
-        try await Task.sleep(for: step)
+        try await Task.sleep(nanoseconds: stepNanoseconds)
         for slice in 1...10 {
-            try await Task.sleep(for: step)
+            try await Task.sleep(nanoseconds: stepNanoseconds)
             progress(
                 DownloadProgress(
                     phase: .downloading, completedBytes: total * Int64(slice) / 10,
@@ -82,8 +84,8 @@ public struct SimulatedStoreEngine: StoreEngine {
             } else {
                 request.app.version
             }
-        let file = request.destination.appending(
-            path: PackageName.file(
+        let file = request.destination.appendingPathComponent(
+            PackageName.file(
                 bundleID: request.app.bundleID, appID: request.app.id, version: version))
         try Data("IPA".utf8).write(to: file)
         return DownloadedPackage(fileURL: file, version: version, sizeBytes: total)
